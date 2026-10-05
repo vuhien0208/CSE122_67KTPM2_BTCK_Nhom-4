@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đăng nhập – CropMate AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+<div class="split">
+
+  <aside class="left">
+    <a href="../index.html" class="brand"><i>🌱</i><span><b>CropMate AI</b><em>v2.4 Enterprise</em><small>Precision Agronomy OS</small></span></a>
+
+    <div class="mid">
+      <h1>Nâng tầm nông nghiệp Việt với <span>Trí tuệ Nhân tạo</span></h1>
+      <p>Nền tảng giám sát chu kỳ cây trồng, phân tích đất vi sinh và dự báo dịch bệnh với độ chính xác cao dành cho hợp tác xã và chuyên gia.</p>
+    </div>
+
+    <div class="live" aria-label="Minh họa dữ liệu thửa ruộng">
+      <div class="live-h"><i>🧠</i><div><b>Thửa ruộng A-04 (ST25)</b><small>HTX Nông nghiệp Tân Hưng Phát</small></div><span class="conf"><s></s>98.4% Confidence</span></div>
+      <div class="stats">
+        <div class="stat"><small>Sức khỏe cây trồng <u>💚</u></small><b>94.2% <span>+2.4% tuần qua</span></b><div class="meter"><span style="width:94%"></span></div></div>
+        <div class="stat"><small>Độ ẩm đất &amp; pH <u>💧</u></small><b>68% <span class="plain">/ 6.5 pH</span></b><p><s></s>Ngưỡng tối ưu</p></div>
+      </div>
+      <div class="warn">⚠️ <p><b>Cảnh báo thời tiết:</b> Mưa dông dự kiến 16:00. Khuyến nghị tạm hoãn phun phân vi sinh qua lá.</p></div>
+    </div>
+
+    <blockquote class="quote">
+      <i class="av">TB</i>
+      <div><p>"CropMate AI giúp xã viên chúng tôi giảm 30% phân bón hóa học và theo dõi 120 hecta lúa chỉ qua một màn hình."</p><cite>Ông Trần Văn Bình • Giám đốc HTX Nông nghiệp Cần Thơ</cite></div>
+    </blockquote>
+  </aside>
+
+  <main class="right">
+    <div class="top">
+      <a href="../index.html" class="back">← Quay về trang chủ</a>
+      <span class="sec">🛡 Bảo mật chuẩn ISO/IEC 27001</span>
+    </div>
+
+    <div class="box">
+      <h2>Chào mừng trở lại</h2>
+      <p class="intro">Đăng nhập vào tài khoản <b>CropMate AI</b> của bạn để tiếp tục điều hành.</p>
+
+      <div class="notice">ⓘ <p>Hệ thống vừa cập nhật thuật toán dự báo rầy nâu vụ Đông Xuân. Vui lòng chọn đúng vai trò để tải dữ liệu tương thích.</p></div>
+
+      <form id="loginForm" novalidate>
+        <div class="lbl" id="roleLbl">Vai trò truy cập</div>
+        <div class="roles" role="radiogroup" aria-labelledby="roleLbl">
+          <label><input type="radio" name="role" value="farmer" checked><span><i>🚜</i>Nông dân</span></label>
+          <label><input type="radio" name="role" value="expert"><span><i>🧠</i>Chuyên gia</span></label>
+          <label><input type="radio" name="role" value="coordinator"><span><i>👥</i>Điều phối HTX</span></label>
+          <label><input type="radio" name="role" value="admin"><span><i>🛡️</i>Quản trị</span></label>
+        </div>
+
+        <div class="field"><label for="id">Email hoặc Số điện thoại</label>
+          <div class="input"><i>👤</i><input id="id" type="text" placeholder="VD: nongdan@cropmate.vn hoặc 0912 345 678" autocomplete="username" required></div></div>
+
+        <div class="field"><label for="pw">Mật khẩu</label>
+          <div class="input"><i>🔒</i><input id="pw" type="password" placeholder="Nhập mật khẩu" autocomplete="current-password" required><button type="button" class="eye" aria-label="Hiện/ẩn mật khẩu">👁</button></div></div>
+
+        <div class="opts">
+          <label class="remember"><input type="checkbox" id="remember" checked>Ghi nhớ đăng nhập</label>
+          <a href="#" class="forgot">Quên mật khẩu?</a>
+        </div>
+
+        <p class="error" id="err" role="alert" hidden></p>
+        <button type="submit" class="submit">Đăng nhập vào hệ thống →</button>
+      </form>
+
+      <div class="or"><span>Hoặc đăng nhập bằng</span></div>
+      <div class="alt">
+        <button type="button" class="alt-b"><b class="g">G</b>Tài khoản Google</button>
+        <button type="button" class="alt-b"><i>🪪</i>Định danh HTX / VNeID</button>
+      </div>
+      <p class="reg">Chưa có tài khoản trang trại? <a href="register.html">Đăng ký ngay</a></p>
+    </div>
+
+    <footer>
+      <span>© 2025 CropMate AI Vietnam. Bản quyền thuộc Bộ phận R&amp;D.</span>
+      <nav><a href="#">Điều khoản dịch vụ</a><a href="#">Chính sách bảo mật</a><a href="#">Hỗ trợ 24/7</a></nav>
+    </footer>
+  </main>
+</div>
+<script src="../js/login.js"></script>
+</body>
+</html>

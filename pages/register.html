@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tạo tài khoản – CropMate AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/register.css">
+</head>
+<body>
+<div class="split">
+
+  <aside class="left">
+    <a href="../index.html" class="brand"><i>🌱</i><span><b>CropMate AI</b><small>PRECISION AGRONOMY OS</small></span></a>
+    <span class="chip"><s></s>Mạng lưới Nông nghiệp 4.0 Việt Nam</span>
+    <h1>Gia nhập mạng lưới hơn <em>15,000+ nông dân</em> &amp; chuyên gia nông nghiệp thông minh</h1>
+    <p class="lead">Chuyển đổi kỹ thuật số nông hộ với nền tảng phân tích vi khí hậu, chẩn đoán sâu bệnh bằng thị giác máy tính và hỗ trợ liên kết chuỗi giá trị toàn diện.</p>
+    <ul class="feats">
+      <li><i>🧠</i><div><b>Trợ lý AI chẩn đoán bệnh miễn phí</b><span>Nhận diện hơn 240 loại sâu bệnh qua ảnh chụp lá và thân cây với độ chính xác trên 98.4%.</span></div></li>
+      <li><i>📖</i><div><b>Nhật ký điện tử chuẩn VietGAP</b><span>Tự động ghi chép nhật trình canh tác theo giọng nói, hỗ trợ trích xuất hồ sơ xuất khẩu tức thì.</span></div></li>
+      <li><i>🎧</i><div><b>Kết nối trực tiếp chuyên gia nông học</b><span>Tư vấn trực tuyến 1:1 cùng các viện nghiên cứu cây trồng và chuyên viên nông nghiệp vùng.</span></div></li>
+      <li><i>📦</i><div><b>Quản lý vật tư minh bạch</b><span>Định lượng phân bón, thuốc BVTV chính xác theo công thức thổ nhưỡng, tối ưu 25% chi phí.</span></div></li>
+    </ul>
+  </aside>
+
+  <main class="right">
+    <div class="top">
+      <a href="../index.html" class="back">← Quay về trang chủ</a>
+      <span class="help">Hỗ trợ bà con: <b>1800 6868 (Miễn cước)</b></span>
+    </div>
+
+    <span class="chip light"><s></s>Tạo tài khoản mới</span>
+    <h2>Tạo tài khoản CropMate AI</h2>
+    <p class="intro">Bắt đầu vụ mùa thắng lợi với sự đồng hành của AI. Thiết lập tài khoản chỉ trong 2 phút.</p>
+
+    <form id="regForm" novalidate>
+      <div class="row-label"><label id="roleLbl">Chọn vai trò chính của bạn <span class="req">*</span></label><span class="note">Quyết định bảng điều khiển &amp; tính năng</span></div>
+      <div class="roles" role="radiogroup" aria-labelledby="roleLbl">
+        <label class="role"><input type="radio" name="role" value="farmer" checked><i>🚜</i><div><b>Farmer</b><span>Nông dân / Chủ hộ canh tác trực tiếp</span></div><em>✔</em></label>
+        <label class="role"><input type="radio" name="role" value="expert"><i>🧠</i><div><b>Expert</b><span>Kỹ sư / Chuyên gia nông nghiệp cố vấn</span></div><em>✔</em></label>
+        <label class="role"><input type="radio" name="role" value="coordinator"><i>🕸️</i><div><b>Coordinator</b><span>Cán bộ Hợp tác xã / Doanh nghiệp liên kết</span></div><em>✔</em></label>
+        <label class="role"><input type="radio" name="role" value="admin"><i>🛡️</i><div><b>Admin</b><span>Quản trị viên hạ tầng vùng &amp; chuỗi cung ứng</span></div><em>✔</em></label>
+      </div>
+
+      <div class="two">
+        <div class="field"><label for="name">Họ và tên đầy đủ <span class="req">*</span></label>
+          <div class="input"><i>👤</i><input id="name" type="text" placeholder="Ví dụ: Nguyễn Văn An" autocomplete="name" required></div></div>
+        <div class="field"><div class="row-label"><label for="phone">Số điện thoại <span class="req">*</span></label><span class="otp">Nhận mã xác thực OTP</span></div>
+          <div class="input"><i>📞</i><input id="phone" type="tel" placeholder="0912 345 678" autocomplete="tel" inputmode="tel" required></div></div>
+      </div>
+
+      <div class="field"><label for="email">Email làm việc <span class="req">*</span></label>
+        <div class="input"><i>✉️</i><input id="email" type="email" placeholder="nongdan.an@cropmate.vn" autocomplete="email" required></div></div>
+
+      <div class="field"><label for="area">Thửa ruộng / Khu vực canh tác chính (Tỉnh/Thành phố hoặc HTX) <span class="req">*</span></label>
+        <div class="input"><i>📍</i><input id="area" type="text" placeholder="Ví dụ: HTX Nông nghiệp Tân Bình, Huyện Tháp Mười, Đồng Tháp" required></div>
+        <p class="hint">Hệ thống dùng thông tin này để tự động tích hợp trạm thời tiết và mô hình đất tại khu vực của bà con.</p></div>
+
+      <div class="two">
+        <div class="field"><label for="pw">Mật khẩu <span class="req">*</span></label>
+          <div class="input"><i>🔒</i><input id="pw" type="password" placeholder="Tối thiểu 8 ký tự" autocomplete="new-password" required><button type="button" class="eye" data-t="pw" aria-label="Hiện/ẩn mật khẩu">👁</button></div></div>
+        <div class="field"><label for="pw2">Xác nhận mật khẩu <span class="req">*</span></label>
+          <div class="input"><i>🔐</i><input id="pw2" type="password" placeholder="Nhập lại mật khẩu" autocomplete="new-password" required><button type="button" class="eye" data-t="pw2" aria-label="Hiện/ẩn mật khẩu">👁</button></div></div>
+      </div>
+
+      <div class="strength" aria-live="polite">
+        <div class="srow"><b>Độ mạnh mật khẩu:</b><span id="sLabel">Chưa nhập</span></div>
+        <div class="bars"><span></span><span></span><span></span><span></span></div>
+        <p>ⓘ Nên gồm chữ hoa, chữ thường, số và ký tự đặc biệt để bảo vệ tài khoản.</p>
+      </div>
+
+      <label class="agree"><input type="checkbox" id="agree" required>
+        <span>Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật dữ liệu nông nghiệp CropMate AI</a>. Chúng tôi cam kết không tiết lộ hay thương mại hóa dữ liệu canh tác của bạn.</span></label>
+
+      <p class="error" id="err" role="alert" hidden></p>
+      <button type="submit" class="submit">Tạo tài khoản miễn phí →</button>
+      <p class="login">Đã có tài khoản? <a href="login.html">Đăng nhập</a></p>
+    </form>
+  </main>
+</div>
+<script src="../js/register.js"></script>
+</body>
+</html>
