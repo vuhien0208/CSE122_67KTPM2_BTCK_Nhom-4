@@ -17,7 +17,7 @@ Mở `index.html` bằng trình duyệt (hoặc dùng Live Server / `python3 -m 
 
 Admin có nút **Đặt lại dữ liệu demo** ở dashboard.
 
-## Luồng nghiệp vụ xuyên role (nên demo)
+## Luồng nghiệp vụ role (nên demo)
 1. Farmer: Nhật ký canh tác → thêm nhật ký.
 2. Farmer: Yêu cầu hỗ trợ → tạo yêu cầu, dùng AI-1 phân loại, gửi.
 3. Expert: yêu cầu xuất hiện trong hàng chờ (có thông báo) → Nhận xử lý → xem nhật ký liên quan → AI-3 tóm tắt → gửi phản hồi.
