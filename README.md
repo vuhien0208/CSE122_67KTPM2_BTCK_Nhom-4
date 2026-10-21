@@ -1,7 +1,7 @@
 # CropMate AI — Nhật ký mùa vụ và trợ lý canh tác
 
 Frontend prototype cho học phần **Phát triển ứng dụng Web cơ bản (CSE122)**.
-Công nghệ: HTML5, CSS3, JavaScript thuần, JSON seed, LocalStorage/SessionStorage. Không cần Backend, không cần build.
+Công nghệ: HTML5, CSS3, JavaScript thuần, JSON seed, LocalStorage/SessionStorage.
 
 ## Chạy thử
 Mở `index.html` bằng trình duyệt (hoặc dùng Live Server / `python3 -m http.server`). Chọn tài khoản demo ở `login.html`.
