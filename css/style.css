@@ -65,3 +65,25 @@ main{padding:26px 28px 56px;max-width:1280px;width:100%}
 .page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
 .page-head p{color:var(--muted);margin-top:4px;max-width:62ch}
 .scrim{display:none}
+
+/* Căn chỉnh khu vực bên trái trang đăng nhập */
+.auth-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+    padding: 40px 5%;
+    overflow: hidden;
+}
+
+/* Ảnh minh họa */
+.auth-image {
+    display: block;
+    width: 100%;
+    max-width: 720px;
+    height: 450px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 12px;
+    margin: 30px auto 0;
+}
