@@ -1,0 +1,27 @@
+/* ===================================================
+   CSS RIENG CHO TRANG LICH HOAT DONG (COORDINATOR)
+   Phan lon dung class chung: .card, .cal, .ev, .list,
+   .badge, .btn, .empty. File nay chi them vai chinh nho.
+   =================================================== */
+
+/* Nhan thang co do rong co dinh de nut trai/phai khong nhay khi doi thang */
+.cal-month-label {
+    min-width: 130px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+/* Hai o loc (Nong ho / Loai) nam ngang, khong bi tut xuong */
+.cal-toolbar {
+    flex-wrap: wrap;
+}
+
+.cal-filter {
+    margin-bottom: 0;
+    min-width: 150px;
+}
+
+/* Bang lich trong card khong bi sat lep */
+#calendarGrid .cal {
+    margin-bottom: 0;
+}

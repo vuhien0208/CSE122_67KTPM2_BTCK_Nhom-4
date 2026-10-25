@@ -1,236 +1,219 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CropMate AI - Lịch hoạt động</title>
-    <!-- Thư viện Bootstrap 5 & FontAwesome -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- CSS chung của nhóm -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lịch hoạt động — CropMate AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
     <link rel="stylesheet" href="../../css/coordinator-calendar.css">
-    
-    
 </head>
-<body>
+<body data-role="coordinator" data-root="../../" data-page="coordinator-calendar" data-title="Lịch hoạt động" data-static-shell="true">
+    <a class="skip-link" href="#main">Bỏ qua đến nội dung chính</a>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <div>
-            <div class="sidebar-brand">
-                <div class="logo-icon"><i class="fa-solid fa-seedling"></i></div>
-                <div>
-                    <div style="font-size: 1.1rem;">CropMate AI</div>
-                    <div style="font-size: 0.75rem; color: #a3b899; font-weight: normal;">Nhật ký mùa vụ & trợ lý canh tác</div>
-                </div>
-            </div>
+    <div class="app">
+        <!-- MENU BÊN TRÁI -->
+        <aside class="sidebar" id="sidebar" aria-label="Điều hướng chính">
+            <a class="brand" href="coordinator-farm-overview.html">
+                <span class="brand-mark"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21v-9M12 12C12 8 9 6 5 6c0 4 3 6 7 6zM12 14c0-3 2-5 6-5 0 3-2 5-6 5z"/></svg></span>
+                <span>CropMate AI<small>Nhật ký mùa vụ & trợ lý canh tác</small></span>
+            </a>
 
-            <div class="sidebar-category">Điều phối HTX</div>
-            <ul class="sidebar-nav">
-                <li><a href="coordinator-farm-overview.html"><i class="fa-solid fa-location-dot"></i> Tổng quan nông hộ</a></li>
-                <li><a href="coordinator-calendar.html" class="active"><i class="fa-regular fa-calendar"></i> Lịch hoạt động</a></li>
-                <li><a href="coordinator-season-summary.html"><i class="fa-solid fa-chart-column"></i> Tổng kết mùa vụ</a></li>
+            <div class="nav-label">Điều phối HTX</div>
+            <ul class="nav">
+                <li>
+                    <a href="coordinator-farm-overview.html">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21s-6-6-6-11a6 6 0 0 1 12 0c0 5-6 11-6 11z"/><circle cx="12" cy="10" r="2"/></svg>
+                        <span>Tổng quan nông hộ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="coordinator-calendar.html" aria-current="page">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+                        <span>Lịch hoạt động</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="coordinator-season-summary.html">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20V4M4 20h16M8 16v-5M12 16V8M16 16v-3"/></svg>
+                        <span>Tổng kết mùa vụ</span>
+                    </a>
+                </li>
             </ul>
 
-            <div class="sidebar-category" style="margin-top: 25px;">Tài khoản</div>
-<ul class="sidebar-nav">
-    <li><a href="../shared/profile.html"><i class="fa-regular fa-user"></i> Hồ sơ cá nhân</a></li>
-    <li><a href="../shared/notifications.html"><i class="fa-regular fa-bell"></i> Thông báo <span class="badge bg-warning text-dark ms-auto" style="font-size: 0.7rem;">1</span></a></li>
-</ul>
-        </div>
+            <div class="nav-label">Tài khoản</div>
+            <ul class="nav">
+                <li>
+                    <a href="../shared/profile.html">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                        <span>Hồ sơ cá nhân</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../shared/notifications.html">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 21h4"/></svg>
+                        <span>Thông báo</span>
+                    </a>
+                </li>
+            </ul>
 
-        <div>
-            <a href="#" onclick="openLogoutModal(event)" class="btn btn-light w-100 text-dark fw-bold mb-3 py-2" style="border-radius: 8px; text-decoration: none; display: inline-block; text-align: center;">
-                <i class="fa-solid fa-right-from-bracket me-2"></i> Đăng xuất
-            </a>
-            <div style="font-size: 0.75rem; color: #8fa89b; line-height: 1.4;">
-                Bản demo mô phỏng Frontend. Dữ liệu lưu trong trình duyệt của bạn.
+            <div class="sidebar-foot">
+                <button type="button" class="btn btn-outline btn-sm btn-block" data-logout>
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg> Đăng xuất
+                </button>
+                <p style="margin-top:10px">Bản demo mô phỏng Frontend. Dữ liệu lưu trong trình duyệt của bạn.</p>
             </div>
-        </div>
-    </div>
+        </aside>
 
-    <!-- MAIN CONTENT -->
-    <div class="main-content">
-        
-        <!-- HEADER -->
-        <div class="top-header">
-            <h5 class="m-0 fw-bold text-dark">Lịch hoạt động</h5>
-            <div class="d-flex align-items-center gap-3">
-                <a href="../shared/notifications.html" class="position-relative text-decoration-none" title="Xem thông báo">
-                    <i class="fa-regular fa-bell fs-5 text-secondary"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">1</span>
+        <!-- NỘI DUNG CHÍNH -->
+        <div class="app-main">
+            <header class="topbar" id="topbar">
+                <button type="button" class="icon-btn menu-btn" data-menu aria-label="Mở menu" aria-controls="sidebar" aria-expanded="false">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                <h1>Lịch hoạt động</h1>
+                <a class="icon-btn" href="../shared/notifications.html" aria-label="Thông báo">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 21h4"/></svg>
                 </a>
-                <div class="d-flex align-items-center gap-2 border-start ps-3">
-                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 35px; height: 35px;">C</div>
-                    <div>
-                        <div class="fw-bold" style="font-size: 0.9rem;">Đặng Minh Châu</div>
-                        <div class="text-muted" style="font-size: 0.75rem;">Điều phối HTX</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <a class="user-chip" href="../shared/profile.html">
+                    <span class="avatar" aria-hidden="true">C</span>
+                    <span class="meta"><b>Đặng Minh Châu</b><span>Điều phối HTX</span></span>
+                </a>
+            </header>
 
-        <!-- TIÊU ĐỀ PAGE & NÚT THÊM SỰ KIỆN -->
-        <div class="d-flex justify-content-between align-items-start mb-4">
-            <div>
-                <h4 class="fw-bold text-dark mb-1">Lịch hoạt động</h4>
-                <p class="text-muted m-0" style="font-size: 0.9rem; max-width: 650px;">
-                    Lịch chăm sóc, kiểm tra và họp của HTX, kèm các công việc từ checklist của nông dân. Việc trễ hạn hiển thị màu đỏ.
-                </p>
-            </div>
-            <button class="btn btn-success px-3 py-2 fw-medium" style="background-color: #14532d; border-radius: 8px;" onclick="openAddEventModal()">
-                <i class="fa-solid fa-plus me-2"></i> Thêm sự kiện
-            </button>
-        </div>
+            <main id="main" tabindex="-1">
+                <div id="view">
 
-        <!-- CARD CHỨA LỊCH CÔNG VIỆC -->
-        <div class="content-card mb-4">
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-                <div class="d-flex align-items-center gap-2">
-                    <button class="btn btn-outline-secondary btn-sm px-2" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-                    <h5 class="fw-bold m-0 px-2 text-dark" id="currentMonthLabel">Tháng 10, 2026</h5>
-                    <button class="btn btn-outline-secondary btn-sm px-2" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
-                    <button class="btn btn-link text-decoration-none text-success fw-bold p-0 ms-2" style="font-size: 0.9rem;" onclick="goToToday()">Hôm nay</button>
-                </div>
-                
-                <div class="d-flex align-items-center gap-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <label class="form-label text-muted m-0 fw-medium" style="font-size: 0.85rem;">Nông hộ</label>
-                        <select id="filterFarm" class="form-select form-select-sm" style="width: 160px;" onchange="renderCalendar()">
-                            <option value="all">Tất cả</option>
-                            <option value="Vườn rau Mai Hương">Vườn rau Mai Hương</option>
-                            <option value="Trang trại Hải Lúa">Trang trại Hải Lúa</option>
-                            <option value="Nông hộ Tâm Phát">Nông hộ Tâm Phát</option>
-                        </select>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <label class="form-label text-muted m-0 fw-medium" style="font-size: 0.85rem;">Loại</label>
-                        <select id="filterType" class="form-select form-select-sm" style="width: 140px;" onchange="renderCalendar()">
-                            <option value="all">Tất cả</option>
-                            <option value="task">Công việc</option>
-                            <option value="meeting">Cuộc họp</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="calendar-grid" id="calendarGrid">
-                <div class="calendar-header">T2</div>
-                <div class="calendar-header">T3</div>
-                <div class="calendar-header">T4</div>
-                <div class="calendar-header">T5</div>
-                <div class="calendar-header">T6</div>
-                <div class="calendar-header">T7</div>
-                <div class="calendar-header">CN</div>
-            </div>
-        </div>
-
-        <div style="display: flex; gap: 20px; align-items: stretch;">
-            <div style="flex: 7; min-width: 0;">
-                <div class="content-card h-100 d-flex flex-column justify-content-between" style="min-height: 320px;">
-                    <h5 class="fw-bold text-dark mb-3" id="selectedDateTitle">Ngày 25/10/2026</h5>
-                    <div id="dayDetailContainer" class="my-auto"></div>
-                    <div class="text-end mt-3">
-                        <button class="btn btn-sm btn-outline-success" onclick="openAddEventForSelectedDate()">
-                            <i class="fa-solid fa-plus me-1"></i> Thêm sự kiện ngày này
+                    <!-- TIÊU ĐỀ TRANG & NÚT THÊM SỰ KIỆN -->
+                    <div class="page-head">
+                        <div>
+                            <h2>Lịch hoạt động</h2>
+                            <p>Lịch chăm sóc, kiểm tra và họp của HTX, kèm các công việc từ checklist của nông dân. Việc trễ hạn hiển thị màu đỏ.</p>
+                        </div>
+                        <button class="btn" type="button" onclick="openAddEventModal()">
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg> Thêm sự kiện
                         </button>
                     </div>
-                </div>
-            </div>
 
-            <div style="flex: 5; min-width: 0;">
-                <div class="content-card h-100" style="min-height: 320px;">
-                    <h5 class="fw-bold text-dark mb-3">Việc trễ hạn</h5>
-                    <div class="list-group list-group-flush" id="lateTasksList"></div>
+                    <!-- CARD CHỨA LỊCH -->
+                    <section class="card" style="margin-bottom:20px">
+                        <div class="card-head cal-toolbar">
+                            <div class="row">
+                                <button class="btn btn-sm btn-outline" type="button" onclick="changeMonth(-1)" aria-label="Tháng trước">
+                                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 6l-6 6 6 6"/></svg>
+                                </button>
+                                <strong id="currentMonthLabel" class="cal-month-label">Tháng 10, 2026</strong>
+                                <button class="btn btn-sm btn-outline" type="button" onclick="changeMonth(1)" aria-label="Tháng sau">
+                                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 6l6 6-6 6"/></svg>
+                                </button>
+                                <button class="btn btn-sm btn-ghost" type="button" onclick="goToToday()">Hôm nay</button>
+                            </div>
+                            <div class="row">
+                                <div class="field cal-filter">
+                                    <label for="filterFarm">Nông hộ</label>
+                                    <select id="filterFarm" onchange="renderCalendar()">
+                                        <option value="all">Tất cả</option>
+                                        <option value="Vườn rau Mai Hương">Vườn rau Mai Hương</option>
+                                        <option value="Trang trại Hải Lúa">Trang trại Hải Lúa</option>
+                                        <option value="Nông hộ Tâm Phát">Nông hộ Tâm Phát</option>
+                                    </select>
+                                </div>
+                                <div class="field cal-filter">
+                                    <label for="filterType">Loại</label>
+                                    <select id="filterType" onchange="renderCalendar()">
+                                        <option value="all">Tất cả</option>
+                                        <option value="task">Công việc</option>
+                                        <option value="meeting">Cuộc họp</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="calendarGrid"></div>
+                        </div>
+                    </section>
+
+                    <!-- 2 KHỐI BÊN DƯỚI -->
+                    <div class="split">
+                        <!-- Chi tiết ngày được chọn -->
+                        <section class="card">
+                            <div class="card-head">
+                                <h2 id="selectedDateTitle">Ngày 25/10/2026</h2>
+                            </div>
+                            <div class="card-body">
+                                <div id="dayDetailContainer"></div>
+                                <div class="row" style="justify-content:flex-end;margin-top:14px">
+                                    <button class="btn btn-sm btn-outline" type="button" onclick="openAddEventForSelectedDate()">
+                                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg> Thêm sự kiện ngày này
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Việc trễ hạn -->
+                        <section class="card">
+                            <div class="card-head">
+                                <h2>Việc trễ hạn</h2>
+                            </div>
+                            <ul class="list" id="lateTasksList"></ul>
+                        </section>
+                    </div>
+
                 </div>
-            </div>
+                <noscript><p>Trang cần bật JavaScript để hoạt động.</p></noscript>
+            </main>
         </div>
-
     </div>
 
     <!-- MODAL THÊM / SỬA SỰ KIỆN -->
-    <div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white" style="background-color: #14532d !important;">
-                    <h5 class="modal-title fw-bold" id="modalTitle"><i class="fa-solid fa-plus me-2"></i> Thêm sự kiện mới</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+    <dialog class="modal" id="eventModal" aria-labelledby="eventModalTitle">
+        <div class="modal-head">
+            <h2 id="eventModalTitle">Thêm sự kiện mới</h2>
+            <button type="button" class="icon-btn" onclick="closeModal('eventModal')" aria-label="Đóng">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="eventIndex">
+            <div class="field">
+                <label for="eventTitleInput">Tên công việc / Sự kiện</label>
+                <input type="text" id="eventTitleInput" placeholder="Ví dụ: Họp kỹ thuật canh tác">
+            </div>
+            <div class="field">
+                <label for="eventFarmInput">Chọn nông hộ</label>
+                <select id="eventFarmInput">
+                    <option value="HTX Điều phối">-- Tất cả nông hộ / HTX --</option>
+                    <option value="Vườn rau Mai Hương">Vườn rau Mai Hương</option>
+                    <option value="Trang trại Hải Lúa">Trang trại Hải Lúa</option>
+                    <option value="Nông hộ Tâm Phát">Nông hộ Tâm Phát</option>
+                </select>
+            </div>
+            <div class="form-grid">
+                <div class="field">
+                    <label for="eventDateInput">Ngày thực hiện</label>
+                    <input type="date" id="eventDateInput">
                 </div>
-                <div class="modal-body">
-                    <input type="hidden" id="eventIndex">
-                    <form id="eventForm">
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Tên công việc / Sự kiện</label>
-                            <input type="text" id="eventTitleInput" class="form-control" placeholder="Ví dụ: Họp kỹ thuật canh tác" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Chọn nông hộ</label>
-                            <select id="eventFarmInput" class="form-select">
-                                <option value="HTX Điều phối">-- Tất cả nông hộ / HTX --</option>
-                                <option value="Vườn rau Mai Hương">Vườn rau Mai Hương</option>
-                                <option value="Trang trại Hải Lúa">Trang trại Hải Lúa</option>
-                                <option value="Nông hộ Tâm Phát">Nông hộ Tâm Phát</option>
-                            </select>
-                        </div>
-                        <div class="row g-2 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Ngày thực hiện</label>
-                                <input type="date" id="eventDateInput" class="form-control" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Loại hoạt động</label>
-                                <select id="eventTypeInput" class="form-select">
-                                    <option value="task">Công việc</option>
-                                    <option value="meeting">Cuộc họp</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-success" style="background-color: #14532d;" onclick="saveEventData()">Lưu lại</button>
+                <div class="field">
+                    <label for="eventTypeInput">Loại hoạt động</label>
+                    <select id="eventTypeInput">
+                        <option value="task">Công việc</option>
+                        <option value="meeting">Cuộc họp</option>
+                    </select>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- MODAL ĐĂNG XUẤT -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; padding: 10px;">
-                <div class="modal-header border-0 pb-0 align-items-center">
-                    <h5 class="modal-title fw-bold text-dark" style="font-size: 1.15rem;">Đăng xuất</h5>
-                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-dark py-3" style="font-size: 0.95rem;">
-                    Bạn muốn đăng xuất khỏi CropMate AI?
-                </div>
-                <div class="modal-footer border-0 pt-0 pb-2">
-                    <button type="button" class="btn btn-outline-secondary px-4 py-2 fw-medium" data-bs-dismiss="modal" style="border-radius: 8px; font-size: 0.9rem;">Hủy</button>
-                    <button type="button" class="btn px-4 py-2 fw-medium text-white" style="background-color: #14532d; border-radius: 8px; font-size: 0.9rem;" onclick="confirmLogout()">Đăng xuất</button>
-                </div>
-            </div>
+        <div class="modal-foot">
+            <button type="button" class="btn btn-outline" onclick="closeModal('eventModal')">Hủy</button>
+            <button type="button" class="btn" onclick="saveEventData()">Lưu lại</button>
         </div>
-    </div>
+    </dialog>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../js/data/seed.js"></script>
     <script src="../../js/storage.js"></script>
+    <script src="../../js/auth.js"></script>
     <script src="../../js/ui.js"></script>
     <script src="../../js/modules/coordinator-calendar.js"></script>
-    <script>
-        function openLogoutModal(e) {
-            e.preventDefault();
-            var myModal = new bootstrap.Modal(document.getElementById('logoutModal'));
-            myModal.show();
-        }
-        function confirmLogout() {
-            localStorage.clear();
-            sessionStorage.clear();
-            window.location.href = '../../login.html';
-        }
-    </script>
 </body>
 </html>

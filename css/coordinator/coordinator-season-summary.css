@@ -1,0 +1,10 @@
+/* ======================================================
+   CSS RIENG CHO TRANG TONG KET MUA VU (COORDINATOR)
+   Phan lon dung class chung: .card, .toolbar, table.data,
+   .badge, .btn, .empty. File nay chi them vai chinh nho.
+   ====================================================== */
+
+/* Cac nut thao tac (Xem / Sua / Xoa) nam ben phai o cuoi bang */
+#reportTableBody .actions {
+    justify-content: flex-end;
+}

@@ -1,3 +1,14 @@
+/* Trang Coordinator - Lich hoat dong.
+   JS giu nguyen logic cu: doi thang, chon ngay, them/sua/xoa su kien,
+   loc theo nong ho va loai. Chi thay Bootstrap modal bang the <dialog> chung. */
+
+// Kiem tra dang nhap + ve lai sidebar/topbar dung nguoi dung
+(function () {
+    const me = CM.auth.guard('coordinator');
+    if (!me) return;
+    CM.ui.mountShell(me);
+})();
+
 let eventsData = [
     { id: 1, title: "Tỉa lá già và chồi nách", farm: "Vườn rau Mai Hương", date: "2026-10-19", type: "task", status: "late", daysLate: 6, season: "Cà chua đông 2026" },
     { id: 2, title: "Tổng kết vụ Hè Thu", farm: "HTX Điều phối", date: "2026-10-20", type: "meeting", status: "warning" },
@@ -10,18 +21,39 @@ let eventsData = [
     { id: 9, title: "Bón thúc kali", farm: "Vườn rau Mai Hương", date: "2026-10-30", type: "task", status: "info" }
 ];
 
-// Trạng thái tháng/năm hiện tại (Khởi đầu ở tháng 10 năm 2026)
+// Trang thai thang/nam hien tai (Khoi dau o thang 10 nam 2026)
 let currentYear = 2026;
-let currentMonth = 10; // 1 đến 12
+let currentMonth = 10; // 1 den 12
 let selectedDate = "2026-10-25";
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     renderCalendar();
     renderLateTasks();
     renderDayDetail(selectedDate);
 });
 
-// Hàm chuyển đổi tháng (direction: -1 là lùi tháng, +1 là tiến tháng)
+// ----- Cac ham mo/dong modal <dialog> -----
+
+// Mo modal theo id
+function openModal(id) {
+    const dlg = document.getElementById(id);
+    if (dlg && !dlg.open) dlg.showModal();
+}
+
+// Dong modal theo id
+function closeModal(id) {
+    const dlg = document.getElementById(id);
+    if (dlg && dlg.open) dlg.close();
+}
+
+// Bam vao vung mo (backdrop) thi dong modal
+document.addEventListener("click", function (e) {
+    if (e.target.classList && e.target.classList.contains("modal")) {
+        e.target.close();
+    }
+});
+
+// Ham chuyen doi thang (direction: -1 la lui thang, +1 la tien thang)
 function changeMonth(direction) {
     currentMonth += direction;
     if (currentMonth > 12) {
@@ -34,7 +66,7 @@ function changeMonth(direction) {
     renderCalendar();
 }
 
-// Nút "Hôm nay" quay về tháng hiện tại (Tháng 10/2026 theo demo)
+// Nut "Hom nay" quay ve thang hien tai (Thang 10/2026 theo demo)
 function goToToday() {
     currentYear = 2026;
     currentMonth = 10;
@@ -43,172 +75,166 @@ function goToToday() {
     renderDayDetail(selectedDate);
 }
 
-// Render lưới lịch động theo tháng/năm
+// Render lich bang bang .cal cua giao dien chung
 function renderCalendar() {
     const labelEl = document.getElementById("currentMonthLabel");
-    labelEl.innerText = `Tháng ${currentMonth}, ${currentYear}`;
+    labelEl.innerText = "Tháng " + currentMonth + ", " + currentYear;
 
     const grid = document.getElementById("calendarGrid");
-    const headersHTML = `
-        <div class="calendar-header">T2</div>
-        <div class="calendar-header">T3</div>
-        <div class="calendar-header">T4</div>
-        <div class="calendar-header">T5</div>
-        <div class="calendar-header">T6</div>
-        <div class="calendar-header">T7</div>
-        <div class="calendar-header">CN</div>
-    `;
 
-    // Tính số ngày trong tháng hiện tại
-    let totalDays = new Date(currentYear, currentMonth, 0).getDate();
+    // So ngay trong thang hien tai
+    const totalDays = new Date(currentYear, currentMonth, 0).getDate();
 
-    // Tính ngày trong tuần của ngày mùng 1 (0: Chủ Nhật, 1: Thứ Hai, ...)
-    let firstDayIndex = new Date(currentYear, currentMonth - 1, 1).getDay();
-    // Quy đổi về chuẩn T2 là đầu tuần (T2=0, T3=1, ..., CN=6)
-    let emptySpaces = (firstDayIndex === 0) ? 6 : firstDayIndex - 1;
-
-    let daysHTML = "";
-    // Điền các ô trống đầu tháng
-    for (let i = 0; i < emptySpaces; i++) {
-        daysHTML += `<div class="calendar-day text-muted bg-light"></div>`;
-    }
+    // Ngay trong tuan cua ngay mung 1 (0: Chu Nhat, 1: Thu Hai, ...)
+    const firstDayIndex = new Date(currentYear, currentMonth - 1, 1).getDay();
+    // Quy doi ve chuan Thu Hai la dau tuan (T2=0, T3=1, ..., CN=6)
+    const emptySpaces = (firstDayIndex === 0) ? 6 : firstDayIndex - 1;
 
     const filterFarm = document.getElementById("filterFarm").value;
     const filterType = document.getElementById("filterType").value;
 
-    // Điền các ngày trong tháng
-    for (let i = 1; i <= totalDays; i++) {
-        let mStr = currentMonth < 10 ? `0${currentMonth}` : `${currentMonth}`;
-        let dStr = i < 10 ? `0${i}` : `${i}`;
-        let fullDate = `${currentYear}-${mStr}-${dStr}`;
-        let isToday = (fullDate === selectedDate);
+    let html = '<table class="cal"><thead><tr>';
+    html += "<th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>CN</th>";
+    html += "</tr></thead><tbody><tr>";
 
-        // Lọc sự kiện
-        let dayEvents = eventsData.filter(ev => {
+    // Cac o trong dau thang
+    for (let i = 0; i < emptySpaces; i++) {
+        html += '<td class="out"></td>';
+    }
+
+    // Cac ngay trong thang
+    for (let d = 1; d <= totalDays; d++) {
+        const mStr = currentMonth < 10 ? "0" + currentMonth : "" + currentMonth;
+        const dStr = d < 10 ? "0" + d : "" + d;
+        const fullDate = currentYear + "-" + mStr + "-" + dStr;
+        const isToday = (fullDate === selectedDate);
+
+        // Loc su kien theo nong ho va loai
+        const dayEvents = eventsData.filter(function (ev) {
             if (ev.date !== fullDate) return false;
             if (filterFarm !== "all" && ev.farm !== filterFarm && ev.farm !== "HTX Điều phối") return false;
             if (filterType !== "all" && ev.type !== filterType) return false;
             return true;
         });
 
-        let eventsTagsHTML = dayEvents.map(ev => {
-            let badgeClass = "event-normal";
-            if (ev.status === "late") badgeClass = "event-late";
-            else if (ev.status === "warning") badgeClass = "event-warning";
-            else if (ev.status === "info") badgeClass = "event-info";
-
-            return `<div class="event-tag ${badgeClass}" title="${ev.title}" onclick="event.stopPropagation();">${ev.title}</div>`;
+        // Mau chip su kien theo trang thai (dung class .ev cua giao dien chung)
+        const tagsHTML = dayEvents.map(function (ev) {
+            let cls = "ev";
+            if (ev.status === "late") cls += " late";       // Tre han: do
+            else if (ev.status === "warning") cls += " meeting"; // Hop/canh bao: vang
+            else if (ev.status === "info") cls += " task";  // Thong tin: xanh duong
+            return '<span class="' + cls + '" title="' + ev.title + '">' + ev.title + "</span>";
         }).join("");
 
-        daysHTML += `
-            <div class="calendar-day ${isToday ? 'active-today' : ''}" onclick="selectDate('${fullDate}')">
-                <span class="day-num ${isToday ? 'text-success fw-bold' : ''}">${i}</span>
-                ${eventsTagsHTML}
-            </div>
-        `;
+        html += '<td class="' + (isToday ? "today sel" : "") + '">' +
+            '<button type="button" class="daybtn" onclick="selectDate(\'' + fullDate + '\')">' +
+            '<span class="dn">' + d + "</span>" + tagsHTML +
+            "</button></td>";
+
+        // Het tuan thi xuong hang
+        const cellIndex = emptySpaces + d - 1;
+        if ((cellIndex + 1) % 7 === 0 && d < totalDays) {
+            html += "</tr><tr>";
+        }
     }
 
-    grid.innerHTML = headersHTML + daysHTML;
+    // Cac o trong cuoi thang cho du hang
+    const totalCells = emptySpaces + totalDays;
+    const trailing = (7 - (totalCells % 7)) % 7;
+    for (let i = 0; i < trailing; i++) {
+        html += '<td class="out"></td>';
+    }
+
+    html += "</tr></tbody></table>";
+    grid.innerHTML = html;
 }
 
-// Khi click vào một ô ngày trên lịch
+// Khi click vao mot o ngay tren lich
 function selectDate(dateStr) {
     selectedDate = dateStr;
     renderCalendar();
     renderDayDetail(dateStr);
 }
 
-// Hiển thị chi tiết sự kiện ngày được chọn
+// Hien thi chi tiet su kien ngay duoc chon
 function renderDayDetail(dateStr) {
     const titleEl = document.getElementById("selectedDateTitle");
     const container = document.getElementById("dayDetailContainer");
 
-    let parts = dateStr.split("-");
-    titleEl.innerText = `Ngày ${parts[2]}/${parts[1]}/${parts[0]}`;
+    const parts = dateStr.split("-");
+    titleEl.innerText = "Ngày " + parts[2] + "/" + parts[1] + "/" + parts[0];
 
-    let dayEvents = eventsData.filter(ev => ev.date === dateStr);
+    const dayEvents = eventsData.filter(function (ev) { return ev.date === dateStr; });
 
     if (dayEvents.length === 0) {
-        container.innerHTML = `
-            <div class="text-center py-3">
-                <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
-                    <i class="fa-regular fa-calendar-plus fs-4 text-success"></i>
-                </div>
-                <h6 class="fw-bold text-dark mb-1">Không có hoạt động</h6>
-                <p class="text-muted mb-0" style="font-size: 0.85rem;">Thêm sự kiện cho ngày này.</p>
-            </div>
-        `;
-    } else {
-        let html = `<div class="list-group list-group-flush">`;
-        dayEvents.forEach((ev) => {
-            let globalIndex = eventsData.findIndex(item => item.id === ev.id);
-            html += `
-                <div class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center border-bottom">
-                    <div>
-                        <div class="fw-bold text-dark">${ev.title}</div>
-                        <div class="text-muted" style="font-size: 0.8rem;">${ev.farm} ${ev.season ? '· ' + ev.season : ''}</div>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-outline-primary py-0 px-2" onclick="editEvent(${globalIndex})"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn btn-sm btn-outline-danger py-0 px-2" onclick="deleteEvent(${globalIndex})"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>
-            `;
-        });
-        html += `</div>`;
-        container.innerHTML = html;
+        container.innerHTML =
+            '<div class="empty">' +
+            '<div class="ico"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>' +
+            "<h3>Không có hoạt động</h3>" +
+            "<p>Thêm sự kiện cho ngày này.</p>" +
+            "</div>";
+        return;
     }
+
+    let html = '<ul class="list">';
+    dayEvents.forEach(function (ev) {
+        const globalIndex = eventsData.findIndex(function (item) { return item.id === ev.id; });
+        html += "<li>" +
+            "<div><strong>" + ev.title + "</strong>" +
+            '<div class="small muted">' + ev.farm + (ev.season ? " · " + ev.season : "") + "</div></div>" +
+            '<div class="row" style="gap:6px">' +
+            '<button class="btn btn-sm btn-outline" type="button" onclick="editEvent(' + globalIndex + ')">Sửa</button>' +
+            '<button class="btn btn-sm btn-danger" type="button" onclick="deleteEvent(' + globalIndex + ')">Xóa</button>' +
+            "</div></li>";
+    });
+    html += "</ul>";
+    container.innerHTML = html;
 }
 
-// Render danh sách việc trễ hạn
+// Render danh sach viec tre han
 function renderLateTasks() {
     const listEl = document.getElementById("lateTasksList");
-    let lateEvents = eventsData.filter(ev => ev.status === "late");
+    const lateEvents = eventsData.filter(function (ev) { return ev.status === "late"; });
 
     if (lateEvents.length === 0) {
-        listEl.innerHTML = `<p class="text-muted text-center py-3">Không có công việc trễ hạn.</p>`;
+        listEl.innerHTML = '<li><p class="small muted" style="padding:4px 0">Không có công việc trễ hạn.</p></li>';
         return;
     }
 
     let html = "";
-    lateEvents.forEach(ev => {
-        html += `
-            <div class="list-group-item px-0 py-3 d-flex justify-content-between align-items-start border-bottom">
-                <div>
-                    <div class="fw-bold text-dark mb-1">${ev.title}</div>
-                    <div class="text-muted" style="font-size: 0.8rem;">${ev.farm} · ${ev.season || 'Canh tác chung'}</div>
-                </div>
-                <span class="text-danger fw-bold text-nowrap ms-2" style="font-size: 0.8rem;">Trễ ${ev.daysLate || 2} ngày</span>
-            </div>
-        `;
+    lateEvents.forEach(function (ev) {
+        html += "<li>" +
+            "<div><strong>" + ev.title + "</strong>" +
+            '<div class="small muted">' + ev.farm + " · " + (ev.season || "Canh tác chung") + "</div></div>" +
+            '<span class="badge danger">Trễ ' + (ev.daysLate || 2) + " ngày</span>" +
+            "</li>";
     });
     listEl.innerHTML = html;
 }
 
-// Mở modal thêm sự kiện
+// Mo modal them su kien
 function openAddEventModal() {
-    document.getElementById("modalTitle").innerHTML = `<i class="fa-solid fa-plus me-2"></i> Thêm sự kiện mới`;
+    document.getElementById("eventModalTitle").innerText = "Thêm sự kiện mới";
     document.getElementById("eventIndex").value = "";
     document.getElementById("eventTitleInput").value = "";
     document.getElementById("eventDateInput").value = selectedDate;
     document.getElementById("eventFarmInput").value = "HTX Điều phối";
     document.getElementById("eventTypeInput").value = "task";
 
-    var modal = new bootstrap.Modal(document.getElementById('eventModal'));
-    modal.show();
+    openModal("eventModal");
 }
 
 function openAddEventForSelectedDate() {
     openAddEventModal();
 }
 
-// Lưu dữ liệu sự kiện
+// Luu du lieu su kien
 function saveEventData() {
-    let index = document.getElementById("eventIndex").value;
-    let title = document.getElementById("eventTitleInput").value.trim();
-    let farm = document.getElementById("eventFarmInput").value;
-    let date = document.getElementById("eventDateInput").value;
-    let type = document.getElementById("eventTypeInput").value;
+    const index = document.getElementById("eventIndex").value;
+    const title = document.getElementById("eventTitleInput").value.trim();
+    const farm = document.getElementById("eventFarmInput").value;
+    const date = document.getElementById("eventDateInput").value;
+    const type = document.getElementById("eventTypeInput").value;
 
     if (!title || !date) {
         alert("Vui lòng nhập đầy đủ tên sự kiện và ngày thực hiện!");
@@ -216,7 +242,7 @@ function saveEventData() {
     }
 
     if (index === "") {
-        let newEvent = {
+        const newEvent = {
             id: Date.now(),
             title: title,
             farm: farm,
@@ -226,19 +252,17 @@ function saveEventData() {
         };
         eventsData.push(newEvent);
     } else {
-        let idx = parseInt(index);
+        const idx = parseInt(index);
         eventsData[idx].title = title;
         eventsData[idx].farm = farm;
         eventsData[idx].date = date;
         eventsData[idx].type = type;
     }
 
-    var modalEl = document.getElementById('eventModal');
-    var modal = bootstrap.Modal.getInstance(modalEl);
-    modal.hide();
+    closeModal("eventModal");
 
-    // Nếu ngày sự kiện thêm nằm ở tháng khác, tự động chuyển tháng sang ngày đó để thấy ngay
-    let parts = date.split("-");
+    // Neu ngay su kien nam o thang khac, tu dong chuyen thang sang ngay do de thay ngay
+    const parts = date.split("-");
     currentYear = parseInt(parts[0]);
     currentMonth = parseInt(parts[1]);
     selectedDate = date;
@@ -248,21 +272,20 @@ function saveEventData() {
     renderDayDetail(selectedDate);
 }
 
-// Chỉnh sửa sự kiện
+// Chinh sua su kien
 function editEvent(index) {
-    let ev = eventsData[index];
-    document.getElementById("modalTitle").innerHTML = `<i class="fa-solid fa-pen me-2"></i> Chỉnh sửa sự kiện`;
+    const ev = eventsData[index];
+    document.getElementById("eventModalTitle").innerText = "Chỉnh sửa sự kiện";
     document.getElementById("eventIndex").value = index;
     document.getElementById("eventTitleInput").value = ev.title;
     document.getElementById("eventDateInput").value = ev.date;
     document.getElementById("eventFarmInput").value = ev.farm;
     document.getElementById("eventTypeInput").value = ev.type;
 
-    var modal = new bootstrap.Modal(document.getElementById('eventModal'));
-    modal.show();
+    openModal("eventModal");
 }
 
-// Xóa sự kiện
+// Xoa su kien
 function deleteEvent(index) {
     if (confirm("Bạn có chắc chắn muốn xóa sự kiện này không?")) {
         eventsData.splice(index, 1);

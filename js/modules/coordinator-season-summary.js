@@ -1,105 +1,128 @@
-// Dữ liệu ban đầu của các báo cáo tổng kết
+/* Trang Coordinator - Tong ket mua vu.
+   JS giu nguyen logic cu: tim kiem, loc trang thai, them/sua/xoa/xem bao cao.
+   Chi thay Bootstrap modal bang the <dialog> chung va dung class badge/btn chung. */
+
+// Kiem tra dang nhap + ve lai sidebar/topbar dung nguoi dung
+(function () {
+    const me = CM.auth.guard('coordinator');
+    if (!me) return;
+    CM.ui.mountShell(me);
+})();
+
+// Du lieu ban dau cua cac bao cao tong ket
 let reportsData = [
-    { 
-        id: 1, 
-        title: "Báo cáo tổng kết Lúa Hè Thu 2026", 
-        season: "Lúa Hè Thu 2026", 
-        yield: "6.2 tấn/ha", 
-        status: "Đã chốt", 
-        date: "01/08/2026", 
-        note: "Vụ mùa đạt năng suất cao, thời tiết thuận lợi, hoàn thành đúng tiến độ." 
+    {
+        id: 1,
+        title: "Báo cáo tổng kết Lúa Hè Thu 2026",
+        season: "Lúa Hè Thu 2026",
+        yield: "6.2 tấn/ha",
+        status: "Đã chốt",
+        date: "01/08/2026",
+        note: "Vụ mùa đạt năng suất cao, thời tiết thuận lợi, hoàn thành đúng tiến độ."
     }
 ];
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     renderReportsTable();
 });
 
-// Render danh sách báo cáo ra bảng (có hỗ trợ tìm kiếm và lọc trạng thái)
+// ----- Cac ham mo/dong modal <dialog> -----
+
+function openModal(id) {
+    const dlg = document.getElementById(id);
+    if (dlg && !dlg.open) dlg.showModal();
+}
+
+function closeModal(id) {
+    const dlg = document.getElementById(id);
+    if (dlg && dlg.open) dlg.close();
+}
+
+// Bam vao vung mo (backdrop) thi dong modal
+document.addEventListener("click", function (e) {
+    if (e.target.classList && e.target.classList.contains("modal")) {
+        e.target.close();
+    }
+});
+
+// Render danh sach bao cao ra bang (co ho tro tim kiem va loc trang thai)
 function renderReportsTable() {
     const tbody = document.getElementById("reportTableBody");
     const searchTerm = document.getElementById("searchReportInput").value.toLowerCase().trim();
     const statusFilter = document.getElementById("statusReportFilter").value.trim();
 
-    let filtered = reportsData.filter(rep => {
-        let matchText = (rep.title + " " + rep.season + " " + rep.note).toLowerCase().includes(searchTerm);
-        let matchStatus = (statusFilter === "all") || (rep.status === statusFilter);
+    const filtered = reportsData.filter(function (rep) {
+        const matchText = (rep.title + " " + rep.season + " " + rep.note).toLowerCase().includes(searchTerm);
+        const matchStatus = (statusFilter === "all") || (rep.status === statusFilter);
         return matchText && matchStatus;
     });
 
     if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4">Không tìm thấy báo cáo nào phù hợp.</td></tr>`;
+        tbody.innerHTML = '<tr><td colspan="5"><div class="empty" style="padding:24px 16px"><p>Không tìm thấy báo cáo nào phù hợp.</p></div></td></tr>';
         return;
     }
 
     let html = "";
-    filtered.forEach(rep => {
-        let badgeClass = rep.status === "Đã chốt" ? "bg-success text-success bg-opacity-10" : "bg-warning text-dark bg-opacity-10";
-        let dotColor = rep.status === "Đã chốt" ? "text-success" : "text-warning";
+    filtered.forEach(function (rep) {
+        const badgeHTML = rep.status === "Đã chốt"
+            ? '<span class="badge ok">Đã chốt</span>'
+            : '<span class="badge warn">Nháp</span>';
 
-        html += `
-            <tr data-status="${rep.status}">
-                <td>
-                    <div class="fw-bold text-dark">${rep.title}</div>
-                    <div class="text-muted" style="font-size: 0.78rem;">${rep.season}</div>
-                </td>
-                <td>${rep.yield}</td>
-                <td>
-                    <span class="badge ${badgeClass} px-2 py-1" style="font-size: 0.8rem; font-weight: 500;">
-                        <i class="fa-solid fa-circle ${dotColor} me-1" style="font-size: 0.4rem;"></i> ${rep.status}
-                    </span>
-                </td>
-                <td>${rep.date}</td>
-                <td class="text-end">
-                    <button class="btn btn-outline-secondary btn-sm px-2 py-1 me-1" style="border-radius: 6px; font-size: 0.85rem;" onclick="viewReport(${rep.id})"><i class="fa-regular fa-eye me-1"></i> Xem</button>
-                    <button class="btn btn-outline-primary btn-sm px-2 py-1 me-1" style="border-radius: 6px; font-size: 0.85rem;" onclick="editReport(${rep.id})"><i class="fa-solid fa-pen me-1"></i> Sửa</button>
-                    <button class="btn btn-outline-danger btn-sm px-2 py-1" style="border-radius: 6px; font-size: 0.85rem;" onclick="deleteReport(${rep.id})"><i class="fa-solid fa-trash me-1"></i> Xóa</button>
-                </td>
-            </tr>
-        `;
+        html += '<tr data-status="' + rep.status + '">' +
+            "<td><strong>" + rep.title + "</strong>" +
+            '<span class="sub">' + rep.season + "</span></td>" +
+            "<td>" + rep.yield + "</td>" +
+            "<td>" + badgeHTML + "</td>" +
+            "<td>" + rep.date + "</td>" +
+            "<td>" +
+            '<div class="actions">' +
+            '<button class="btn btn-sm btn-outline" type="button" onclick="viewReport(' + rep.id + ')">Xem</button>' +
+            '<button class="btn btn-sm btn-outline" type="button" onclick="editReport(' + rep.id + ')">Sửa</button>' +
+            '<button class="btn btn-sm btn-danger" type="button" onclick="deleteReport(' + rep.id + ')">Xóa</button>' +
+            "</div></td>" +
+            "</tr>";
     });
     tbody.innerHTML = html;
 }
 
-// Mở modal tạo báo cáo mới
+// Mo modal tao bao cao moi
 function openCreateReportModal() {
-    document.getElementById("reportModalTitle").innerHTML = `<i class="fa-solid fa-chart-column me-2"></i> Lập báo cáo tổng kết mùa vụ`;
+    document.getElementById("reportModalTitle").innerText = "Lập báo cáo tổng kết mùa vụ";
     document.getElementById("reportEditId").value = "";
     document.getElementById("modalYieldInput").value = "";
     document.getElementById("modalNoteInput").value = "";
     document.getElementById("modalStatusInput").value = "Đã chốt";
 
-    var modal = new bootstrap.Modal(document.getElementById('reportModal'));
-    modal.show();
+    openModal("reportModal");
 }
 
-// Lập báo cáo nhanh từ nút "Lập báo cáo" ở bảng số liệu mùa vụ phía trên
+// Lap bao cao nhanh tu nut "Lap bao cao" o bang so lieu mua vu phia tren
 function generateReportFromSeason(seasonName) {
     openCreateReportModal();
     document.getElementById("modalSeasonSelect").value = seasonName;
 }
 
-// Lưu báo cáo (Xử lý cả Thêm mới và Chỉnh sửa)
+// Luu bao cao (Xu ly ca Them moi va Chinh sua)
 function saveReportData() {
-    let editId = document.getElementById("reportEditId").value;
-    let season = document.getElementById("modalSeasonSelect").value;
-    let yieldVal = document.getElementById("modalYieldInput").value.trim();
-    let status = document.getElementById("modalStatusInput").value;
-    let note = document.getElementById("modalNoteInput").value.trim();
+    const editId = document.getElementById("reportEditId").value;
+    const season = document.getElementById("modalSeasonSelect").value;
+    const yieldVal = document.getElementById("modalYieldInput").value.trim();
+    const status = document.getElementById("modalStatusInput").value;
+    const note = document.getElementById("modalNoteInput").value.trim();
 
     if (!yieldVal) {
         alert("Vui lòng nhập năng suất ước tính!");
         return;
     }
 
-    let today = new Date();
-    let dateStr = String(today.getDate()).padStart(2, '0') + '/' + String(today.getMonth() + 1).padStart(2, '0') + '/' + today.getFullYear();
+    const today = new Date();
+    const dateStr = String(today.getDate()).padStart(2, "0") + "/" + String(today.getMonth() + 1).padStart(2, "0") + "/" + today.getFullYear();
 
     if (editId === "") {
-        // Tạo mới
-        let newReport = {
+        // Tao moi
+        const newReport = {
             id: Date.now(),
-            title: `Báo cáo tổng kết ${season}`,
+            title: "Báo cáo tổng kết " + season,
             season: season,
             yield: yieldVal,
             status: status,
@@ -109,12 +132,12 @@ function saveReportData() {
         reportsData.push(newReport);
         alert("Đã tạo và lưu báo cáo thành công!");
     } else {
-        // Cập nhật
-        let idNum = parseInt(editId);
-        let report = reportsData.find(r => r.id === idNum);
+        // Cap nhat
+        const idNum = parseInt(editId);
+        const report = reportsData.find(function (r) { return r.id === idNum; });
         if (report) {
             report.season = season;
-            report.title = `Báo cáo tổng kết ${season}`;
+            report.title = "Báo cáo tổng kết " + season;
             report.yield = yieldVal;
             report.status = status;
             report.note = note;
@@ -122,17 +145,14 @@ function saveReportData() {
         alert("Đã cập nhật báo cáo thành công!");
     }
 
-    // Đóng modal và làm mới bảng
-    var modalEl = document.getElementById('reportModal');
-    var modal = bootstrap.Modal.getInstance(modalEl);
-    modal.hide();
-
+    // Dong modal va lam moi bang
+    closeModal("reportModal");
     renderReportsTable();
 }
 
-// Xem chi tiết báo cáo
+// Xem chi tiet bao cao
 function viewReport(id) {
-    let report = reportsData.find(r => r.id === id);
+    const report = reportsData.find(function (r) { return r.id === id; });
     if (!report) return;
 
     document.getElementById("viewReportTitle").innerText = report.title;
@@ -142,30 +162,28 @@ function viewReport(id) {
     document.getElementById("viewReportDate").innerText = report.date;
     document.getElementById("viewReportNote").innerText = report.note;
 
-    var modal = new bootstrap.Modal(document.getElementById('viewReportModal'));
-    modal.show();
+    openModal("viewReportModal");
 }
 
-// Mở modal chỉnh sửa báo cáo
+// Mo modal chinh sua bao cao
 function editReport(id) {
-    let report = reportsData.find(r => r.id === id);
+    const report = reportsData.find(function (r) { return r.id === id; });
     if (!report) return;
 
-    document.getElementById("reportModalTitle").innerHTML = `<i class="fa-solid fa-pen me-2"></i> Chỉnh sửa báo cáo tổng kết`;
+    document.getElementById("reportModalTitle").innerText = "Chỉnh sửa báo cáo tổng kết";
     document.getElementById("reportEditId").value = report.id;
     document.getElementById("modalSeasonSelect").value = report.season;
     document.getElementById("modalYieldInput").value = report.yield;
     document.getElementById("modalStatusInput").value = report.status;
     document.getElementById("modalNoteInput").value = report.note;
 
-    var modal = new bootstrap.Modal(document.getElementById('reportModal'));
-    modal.show();
+    openModal("reportModal");
 }
 
-// Xóa báo cáo
+// Xoa bao cao
 function deleteReport(id) {
     if (confirm("Bạn có chắc chắn muốn xóa báo cáo tổng kết này không?")) {
-        reportsData = reportsData.filter(r => r.id !== id);
+        reportsData = reportsData.filter(function (r) { return r.id !== id; });
         renderReportsTable();
     }
 }
