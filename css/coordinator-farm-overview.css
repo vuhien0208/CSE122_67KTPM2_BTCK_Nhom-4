@@ -1,0 +1,194 @@
+/* =================================================== */
+/* CSS RIÊNG CHO TRANG TỔNG QUAN NÔNG HỘ (COORDINATOR)  */
+/* =================================================== */
+
+body {
+    background-color: #f4f6f8;
+    font-family: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Sidebar bên trái cố định */
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background-color: #0d3b22;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 15px;
+    z-index: 100;
+}
+.sidebar-brand {
+    font-size: 1.25rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+.sidebar-brand .logo-icon {
+    background-color: #eab308 !important; /* Màu vàng chuẩn y hệt mẫu */
+    color: #14532d !important;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+.sidebar-category {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #8fa89b;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+.sidebar-nav li {
+    margin-bottom: 8px;
+}
+.sidebar-nav a {
+    color: #cfd8dc;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+.sidebar-nav a:hover, .sidebar-nav a.active {
+    background-color: #14532d;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+/* Vùng nội dung chính bên phải */
+.main-content {
+    margin-left: 260px;
+    padding: 25px;
+    box-sizing: border-box;
+}
+
+/* Header phía trên */
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    padding: 15px 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    margin-bottom: 25px;
+}
+
+/* Flex Container cho 4 thẻ thống kê nằm ngang */
+.stat-cards-wrapper {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+    width: 100%;
+}
+.stat-card-item {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    border: 1px solid #e2e8f0;
+}
+.stat-card-item .number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1e293b;
+    margin-bottom: 5px;
+}
+.stat-card-item .label {
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+/* Flex Container cho khối Giữa (2 cột) */
+.middle-grid-wrapper {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+    width: 100%;
+}
+.left-priority-col {
+    flex: 7;
+}
+.right-status-col {
+    flex: 5;
+}
+
+/* Card chứa nội dung */
+.content-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 25px;
+}
+
+/* Badge màu trạng thái */
+.badge-priority {
+    background-color: #fde8e8;
+    color: #9b1c1c;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+.badge-late {
+    background-color: #fef3c7;
+    color: #92400e;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+.badge-pause {
+    background-color: #f3f4f6;
+    color: #374151;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Nút chi tiết dạng xanh lục chuẩn */
+.btn-detail-action {
+    background-color: #14532d;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-detail-action:hover {
+    background-color: #0d3b22;
+    color: #ffffff;
+}
+body {
+    background-color: #f8faf6 !important; /* Màu nền kem nhạt đồng bộ chuẩn 100% */
+}
+
+.main-content {
+    background-color: #f8faf6 !important;
+}

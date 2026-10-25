@@ -1,29 +1,328 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tổng kết mùa vụ — CropMate AI</title>
-<meta name="description" content="CropMate AI: nhật ký mùa vụ và trợ lý canh tác (bản demo Frontend).">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/style.css">
-<link rel="stylesheet" href="../../css/components.css">
-<link rel="stylesheet" href="../../css/responsive.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CropMate AI - Tổng kết mùa vụ</title>
+    <!-- Thư viện Bootstrap 5 & FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS chung của nhóm -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <!-- CSS RIÊNG của trang Tổng kết mùa vụ -->
+    <link rel="stylesheet" href="../../css/coordinator-season-summary.css">
 </head>
-<body data-role="coordinator" data-root="../../" data-page="coordinator-season-summary" data-title="Tổng kết mùa vụ">
-<a class="skip-link" href="#main">Bỏ qua đến nội dung chính</a>
-<div class="app">
-  <aside class="sidebar" id="sidebar" aria-label="Điều hướng chính"></aside>
-  <div class="app-main">
-    <header class="topbar" id="topbar"></header>
-    <main id="main" tabindex="-1"><div id="view"></div><noscript><p>Trang cần bật JavaScript để hoạt động.</p></noscript></main>
-  </div>
-</div>
-<script src="../../js/data/seed.js"></script>
-<script src="../../js/storage.js"></script>
-<script src="../../js/auth.js"></script>
-<script src="../../js/ui.js"></script>
-<script src="../../js/ai.js"></script>
-<script src="../../js/modules/coordinator-season-summary.js"></script>
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div>
+            <div class="sidebar-brand">
+                <div class="logo-icon"><i class="fa-solid fa-seedling"></i></div>
+                <div>
+                    <div style="font-size: 1.1rem;">CropMate AI</div>
+                    <div style="font-size: 0.75rem; color: #a3b899; font-weight: normal;">Nhật ký mùa vụ & trợ lý canh tác</div>
+                </div>
+            </div>
+
+            <div class="sidebar-category">Điều phối HTX</div>
+            <ul class="sidebar-nav">
+                <li><a href="coordinator-farm-overview.html"><i class="fa-solid fa-location-dot"></i> Tổng quan nông hộ</a></li>
+                <li><a href="coordinator-calendar.html"><i class="fa-regular fa-calendar"></i> Lịch hoạt động</a></li>
+                <li><a href="coordinator-season-summary.html" class="active"><i class="fa-solid fa-chart-column"></i> Tổng kết mùa vụ</a></li>
+            </ul>
+
+            <div class="sidebar-category" style="margin-top: 25px;">Tài khoản</div>
+<ul class="sidebar-nav">
+    <li><a href="../shared/profile.html"><i class="fa-regular fa-user"></i> Hồ sơ cá nhân</a></li>
+    <li><a href="../shared/notifications.html"><i class="fa-regular fa-bell"></i> Thông báo <span class="badge bg-warning text-dark ms-auto" style="font-size: 0.7rem;">1</span></a></li>
+</ul>
+        </div>
+
+        <div>
+            <!-- Nút đăng xuất gọi modal chuẩn -->
+            <a href="#" onclick="openLogoutModal(event)" class="btn btn-light w-100 text-dark fw-bold mb-3 py-2" style="border-radius: 8px; text-decoration: none; display: inline-block; text-align: center;">
+                <i class="fa-solid fa-right-from-bracket me-2"></i> Đăng xuất
+            </a>
+            <div style="font-size: 0.75rem; color: #8fa89b; line-height: 1.4;">
+                Bản demo mô phỏng Frontend. Dữ liệu lưu trong trình duyệt của bạn.
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        
+        <!-- HEADER -->
+        <div class="top-header">
+            <h5 class="m-0 fw-bold text-dark">Tổng kết mùa vụ</h5>
+            <div class="d-flex align-items-center gap-3">
+                <a href="../shared/notifications.html" class="position-relative text-decoration-none" title="Xem thông báo">
+                    <i class="fa-regular fa-bell fs-5 text-secondary"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">1</span>
+                </a>
+                <div class="d-flex align-items-center gap-2 border-start ps-3">
+                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 35px; height: 35px;">C</div>
+                    <div>
+                        <div class="fw-bold" style="font-size: 0.9rem;">Đặng Minh Châu</div>
+                        <div class="text-muted" style="font-size: 0.75rem;">Điều phối HTX</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TIÊU ĐỀ & NÚT TẠO BÁO CÁO -->
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <h4 class="fw-bold text-dark mb-1">Tổng kết mùa vụ</h4>
+                <p class="text-muted m-0" style="font-size: 0.9rem; max-width: 700px;">
+                    Theo dõi số liệu từng mùa vụ và lập báo cáo tổng kết. Số liệu lấy trực tiếp từ nhật ký, yêu cầu hỗ trợ và checklist.
+                </p>
+            </div>
+            <button class="btn btn-success px-3 py-2 fw-medium" style="background-color: #14532d; border-radius: 8px;" onclick="openCreateReportModal()">
+                <i class="fa-solid fa-plus me-2"></i> Tạo báo cáo
+            </button>
+        </div>
+
+        <!-- BẢNG SỐ LIỆU THEO MÙA VỤ -->
+        <div class="content-card mb-4">
+            <h5 class="fw-bold text-dark mb-3">Số liệu theo mùa vụ</h5>
+
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead class="table-light text-muted" style="font-size: 0.85rem;">
+                        <tr>
+                            <th>Mùa vụ</th>
+                            <th>Nông hộ</th>
+                            <th>Giai đoạn</th>
+                            <th>Nhật ký</th>
+                            <th>Yêu cầu (đã giải quyết)</th>
+                            <th>Checklist</th>
+                            <th>Báo cáo</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size: 0.9rem;">
+                        <tr>
+                            <td>
+                                <div class="fw-bold text-dark">Rau cải xanh tháng 10</div>
+                                <div class="text-muted" style="font-size: 0.78rem;">Rau cải · Đang canh tác</div>
+                            </td>
+                            <td>Vườn rau Mai Hương</td>
+                            <td>Chăm sóc</td>
+                            <td>2</td>
+                            <td>1 (0)</td>
+                            <td>—</td>
+                            <td>
+                                <button class="btn btn-outline-secondary btn-sm px-3 py-1 fw-medium" style="border-radius: 6px; font-size: 0.85rem;" onclick="generateReportFromSeason('Rau cải xanh tháng 10')">Lập báo cáo</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="fw-bold text-dark">Ngô vụ 3 – 2026</div>
+                                <div class="text-muted" style="font-size: 0.78rem;">Ngô · Đang canh tác</div>
+                            </td>
+                            <td>Trang trại Hải Lúa</td>
+                            <td>Giao trồng</td>
+                            <td>2</td>
+                            <td>1 (1)</td>
+                            <td>—</td>
+                            <td>
+                                <button class="btn btn-outline-secondary btn-sm px-3 py-1 fw-medium" style="border-radius: 6px; font-size: 0.85rem;" onclick="generateReportFromSeason('Ngô vụ 3 – 2026')">Lập báo cáo</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="fw-bold text-dark">Lúa Thu Đông 2026</div>
+                                <div class="text-muted" style="font-size: 0.78rem;">Lúa · Đang canh tác</div>
+                            </td>
+                            <td>Trang trại Hải Lúa</td>
+                            <td>Chăm sóc</td>
+                            <td>5</td>
+                            <td>1 (0)</td>
+                            <td>25% · 1 trễ</td>
+                            <td>
+                                <button class="btn btn-outline-secondary btn-sm px-3 py-1 fw-medium" style="border-radius: 6px; font-size: 0.85rem;" onclick="generateReportFromSeason('Lúa Thu Đông 2026')">Lập báo cáo</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="fw-bold text-dark">Cà phê niên vụ 2026</div>
+                                <div class="text-muted" style="font-size: 0.78rem;">Cà phê · Đang canh tác</div>
+                            </td>
+                            <td>Nông hộ Tâm Phát</td>
+                            <td>Ra hoa – đậu quả</td>
+                            <td>0</td>
+                            <td>1 (0)</td>
+                            <td>—</td>
+                            <td>
+                                <button class="btn btn-outline-secondary btn-sm px-3 py-1 fw-medium" style="border-radius: 6px; font-size: 0.85rem;" onclick="generateReportFromSeason('Cà phê niên vụ 2026')">Lập báo cáo</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="fw-bold text-dark">Lúa Hè Thu 2026</div>
+                                <div class="text-muted" style="font-size: 0.78rem;">Lúa · Đã hoàn thành</div>
+                            </td>
+                            <td>Trang trại Hải Lúa</td>
+                            <td>Thu hoạch</td>
+                            <td>0</td>
+                            <td>0 (0)</td>
+                            <td>—</td>
+                            <td>
+                                <span class="badge bg-success bg-opacity-10 text-success px-2 py-1" style="font-size: 0.85rem; font-weight: 500;"><i class="fa-solid fa-check me-1"></i> Đã có</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- KHỐI DƯỚI: BÁO CÁO TỔNG KẾT -->
+        <div class="content-card">
+            <h5 class="fw-bold text-dark mb-3">Báo cáo tổng kết</h5>
+
+            <div class="row g-3 mb-4 align-items-center">
+                <div class="col-md-8">
+                    <label class="form-label fw-bold text-muted" style="font-size: 0.85rem;">Tìm báo cáo</label>
+                    <input type="text" id="searchReportInput" class="form-control" placeholder="Tiêu đề, nội dung..." oninput="renderReportsTable()">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted" style="font-size: 0.85rem;">Trạng thái</label>
+                    <select id="statusReportFilter" class="form-select" onchange="renderReportsTable()">
+                        <option value="all" selected>Tất cả</option>
+                        <option value="Đã chốt">Đã chốt</option>
+                        <option value="Nháp">Nháp</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table align-middle" id="reportTable">
+                    <thead class="table-light text-muted" style="font-size: 0.85rem;">
+                        <tr>
+                            <th>Báo cáo</th>
+                            <th>Năng suất</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                            <th class="text-end">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportTableBody" style="font-size: 0.9rem;">
+                        <!-- Render bằng JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL TẠO / SỬA BÁO CÁO -->
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white" style="background-color: #14532d !important;">
+                    <h5 class="modal-title fw-bold" id="reportModalTitle"><i class="fa-solid fa-chart-column me-2"></i> Lập báo cáo tổng kết mùa vụ</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="reportEditId">
+                    <form id="reportForm">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Chọn mùa vụ tổng kết</label>
+                            <select class="form-select" id="modalSeasonSelect">
+                                <option value="Rau cải xanh tháng 10">Rau cải xanh tháng 10 (Vườn rau Mai Hương)</option>
+                                <option value="Ngô vụ 3 – 2026">Ngô vụ 3 – 2026 (Trang trại Hải Lúa)</option>
+                                <option value="Lúa Thu Đông 2026">Lúa Thu Đông 2026 (Trang trại Hải Lúa)</option>
+                                <option value="Cà phê niên vụ 2026">Cà phê niên vụ 2026 (Nông hộ Tâm Phát)</option>
+                                <option value="Lúa Hè Thu 2026">Lúa Hè Thu 2026 (Trang trại Hải Lúa)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Năng suất ước tính (tấn/ha)</label>
+                            <input type="text" id="modalYieldInput" class="form-control" placeholder="Ví dụ: 5.5 tấn/ha" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Trạng thái báo cáo</label>
+                            <select class="form-select" id="modalStatusInput">
+                                <option value="Đã chốt">Đã chốt</option>
+                                <option value="Nháp">Nháp</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Ghi chú / Nhận xét của điều phối</label>
+                            <textarea class="form-control" id="modalNoteInput" rows="3" placeholder="Nhập đánh giá tiến độ và hiệu quả canh tác..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-success" style="background-color: #14532d;" onclick="saveReportData()">Lưu báo cáo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL XEM CHI TIẾT BÁO CÁO -->
+    <div class="modal fade" id="viewReportModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white" style="background-color: #14532d !important;">
+                    <h5 class="modal-title fw-bold"><i class="fa-regular fa-eye me-2"></i> Chi tiết báo cáo tổng kết</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="fw-bold text-success mb-3" id="viewReportTitle"></h5>
+                    <p><strong>Mùa vụ:</strong> <span id="viewReportSeason"></span></p>
+                    <p><strong>Năng suất:</strong> <span id="viewReportYield"></span></p>
+                    <p><strong>Trạng thái:</strong> <span id="viewReportStatus"></span></p>
+                    <p><strong>Ngày tạo:</strong> <span id="viewReportDate"></span></p>
+                    <p><strong>Nhận xét:</strong> <span id="viewReportNote"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL XÁC NHẬN ĐĂNG XUẤT (CHUẨN 100% GIAO DIỆN NÔNG DÂN) -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; padding: 10px;">
+                <div class="modal-header border-0 pb-0 align-items-center">
+                    <h5 class="modal-title fw-bold text-dark" style="font-size: 1.15rem;">Đăng xuất</h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-dark py-3" style="font-size: 0.95rem;">
+                    Bạn muốn đăng xuất khỏi CropMate AI?
+                </div>
+                <div class="modal-footer border-0 pt-0 pb-2">
+                    <button type="button" class="btn btn-outline-secondary px-4 py-2 fw-medium" data-bs-dismiss="modal" style="border-radius: 8px; font-size: 0.9rem;">Hủy</button>
+                    <button type="button" class="btn px-4 py-2 fw-medium text-white" style="background-color: #14532d; border-radius: 8px; font-size: 0.9rem;" onclick="confirmLogout()">Đăng xuất</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Các file JS chung và JS riêng -->
+    <script src="../../js/storage.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script src="../../js/modules/coordinator-season-summary.js"></script>
+    <script>
+        function openLogoutModal(e) {
+            e.preventDefault();
+            var myModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+            myModal.show();
+        }
+        function confirmLogout() {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = '../../login.html';
+        }
+    </script>
 </body>
 </html>

@@ -1,29 +1,206 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tổng quan nông hộ — CropMate AI</title>
-<meta name="description" content="CropMate AI: nhật ký mùa vụ và trợ lý canh tác (bản demo Frontend).">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../css/style.css">
-<link rel="stylesheet" href="../../css/components.css">
-<link rel="stylesheet" href="../../css/responsive.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CropMate AI - Tổng quan nông hộ</title>
+    <!-- Thư viện Bootstrap 5 & FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS chung của nhóm -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/coordinator-farm-overview.css">
 </head>
-<body data-role="coordinator" data-root="../../" data-page="coordinator-farm-overview" data-title="Tổng quan nông hộ">
-<a class="skip-link" href="#main">Bỏ qua đến nội dung chính</a>
-<div class="app">
-  <aside class="sidebar" id="sidebar" aria-label="Điều hướng chính"></aside>
-  <div class="app-main">
-    <header class="topbar" id="topbar"></header>
-    <main id="main" tabindex="-1"><div id="view"></div><noscript><p>Trang cần bật JavaScript để hoạt động.</p></noscript></main>
-  </div>
-</div>
-<script src="../../js/data/seed.js"></script>
-<script src="../../js/storage.js"></script>
-<script src="../../js/auth.js"></script>
-<script src="../../js/ui.js"></script>
-<script src="../../js/ai.js"></script>
-<script src="../../js/modules/coordinator-farm-overview.js"></script>
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div>
+            <div class="sidebar-brand">
+                <div class="logo-icon"><i class="fa-solid fa-seedling"></i></div>
+                <div>
+                    <div style="font-size: 1.1rem;">CropMate AI</div>
+                    <div style="font-size: 0.75rem; color: #a3b899; font-weight: normal;">Nhật ký mùa vụ & trợ lý canh tác</div>
+                </div>
+            </div>
+
+            <div class="sidebar-category">Điều phối HTX</div>
+            <ul class="sidebar-nav">
+                <li><a href="coordinator-farm-overview.html" class="active"><i class="fa-solid fa-location-dot"></i> Tổng quan nông hộ</a></li>
+                <li><a href="coordinator-calendar.html"><i class="fa-regular fa-calendar"></i> Lịch hoạt động</a></li>
+                <li><a href="coordinator-season-summary.html"><i class="fa-solid fa-chart-column"></i> Tổng kết mùa vụ</a></li>
+            </ul>
+
+            <div class="sidebar-category" style="margin-top: 25px;">Tài khoản</div>
+<ul class="sidebar-nav">
+    <li><a href="../shared/profile.html"><i class="fa-regular fa-user"></i> Hồ sơ cá nhân</a></li>
+    <li><a href="../shared/notifications.html"><i class="fa-regular fa-bell"></i> Thông báo <span class="badge bg-warning text-dark ms-auto" style="font-size: 0.7rem;">1</span></a></li>
+</ul>
+        </div>
+
+        <div>
+            <a href="#" onclick="openLogoutModal(event)" class="btn btn-light w-100 text-dark fw-bold mb-3 py-2" style="border-radius: 8px; text-decoration: none; display: inline-block; text-align: center;">
+                <i class="fa-solid fa-right-from-bracket me-2"></i> Đăng xuất
+            </a>
+            <div style="font-size: 0.75rem; color: #8fa89b; line-height: 1.4;">
+                Bản demo mô phỏng Frontend. Dữ liệu lưu trong trình duyệt của bạn.
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        
+        <!-- HEADER -->
+        <div class="top-header">
+            <h5 class="m-0 fw-bold text-dark">Tổng quan nông hộ</h5>
+            <div class="d-flex align-items-center gap-3">
+                <a href="../shared/notifications.html" class="position-relative text-decoration-none" title="Xem thông báo">
+                    <i class="fa-regular fa-bell fs-5 text-secondary"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">1</span>
+                </a>
+                <div class="d-flex align-items-center gap-2 border-start ps-3">
+                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 35px; height: 35px;">C</div>
+                    <div>
+                        <div class="fw-bold" style="font-size: 0.9rem;">Đặng Minh Châu</div>
+                        <div class="text-muted" style="font-size: 0.75rem;">Điều phối HTX</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TIÊU ĐỀ & NÚT -->
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <h4 class="fw-bold text-dark mb-1">Tổng quan nông hộ</h4>
+                <p class="text-muted m-0" style="font-size: 0.9rem;">
+                    Theo dõi mùa vụ, tiến độ công việc và yêu cầu hỗ trợ của các nông hộ trong HTX.
+                </p>
+            </div>
+            <a href="coordinator-calendar.html" class="btn btn-success px-3 py-2 fw-medium text-decoration-none" style="background-color: #14532d; border-radius: 8px;">
+                <i class="fa-solid fa-plus me-2"></i> Lên lịch hoạt động
+            </a>
+        </div>
+
+        <!-- 4 THẺ THỐNG KÊ NẰM TRÊN 1 HÀNG NGANG DUY NHẤT -->
+        <div class="mb-4" style="display: flex; flex-wrap: nowrap; gap: 16px;">
+            <div style="flex: 1; min-width: 0;">
+                <div class="content-card border-start border-success border-4 h-100 mb-0">
+                    <h3 class="fw-bold text-dark mb-1">2/3</h3>
+                    <p class="text-muted m-0" style="font-size: 0.85rem;">Nông hộ đang hoạt động</p>
+                </div>
+            </div>
+            <div style="flex: 1; min-width: 0;">
+                <div class="content-card border-start border-primary border-4 h-100 mb-0">
+                    <h3 class="fw-bold text-dark mb-1">5</h3>
+                    <p class="text-muted m-0" style="font-size: 0.85rem;">Mùa vụ đang canh tác</p>
+                </div>
+            </div>
+            <div style="flex: 1; min-width: 0;">
+                <div class="content-card border-start border-warning border-4 h-100 mb-0">
+                    <h3 class="fw-bold text-dark mb-1">3</h3>
+                    <p class="text-muted m-0" style="font-size: 0.85rem;">Yêu cầu hỗ trợ đang mở</p>
+                </div>
+            </div>
+            <div style="flex: 1; min-width: 0;">
+                <div class="content-card border-start border-danger border-4 h-100 mb-0">
+                    <h3 class="fw-bold text-dark mb-1">3</h3>
+                    <p class="text-muted m-0" style="font-size: 0.85rem;">Công việc trễ hạn</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- KHỐI NỘI DUNG BÊN DƯỚI (ÉP NẰM CÙNG 1 HÀNG NGANG BẰNG FLEXBOX) -->
+        <div style="display: flex; gap: 20px; align-items: stretch;">
+            <!-- Cột trái: Cần ưu tiên xử lý (chiếm 7 phần) -->
+            <div style="flex: 7; min-width: 0;">
+                <div class="content-card h-100 mb-0">
+                    <h5 class="fw-bold text-dark mb-3">Cần ưu tiên xử lý</h5>
+                    <div class="list-group list-group-flush">
+                        <div class="p-3 border rounded mb-3 bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <h6 class="fw-bold text-dark m-0">Vườn rau Mai Hương</h6>
+                                <span class="badge bg-danger">Cần ưu tiên</span>
+                            </div>
+                            <p class="text-muted m-0" style="font-size: 0.85rem;">2 việc trễ hạn · 2 yêu cầu đang mở (1 ưu tiên cao)</p>
+                        </div>
+                        <div class="p-3 border rounded bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <h6 class="fw-bold text-dark m-0">Trang trại Hải Lúa</h6>
+                                <span class="badge bg-warning text-dark">Trễ hạn</span>
+                            </div>
+                            <p class="text-muted m-0" style="font-size: 0.85rem;">1 việc trễ hạn · 1 yêu cầu đang mở (1 ưu tiên cao)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột phải: Yêu cầu theo trạng thái (chiếm 5 phần) -->
+            <div style="flex: 5; min-width: 0;">
+                <div class="content-card h-100 mb-0">
+                    <h5 class="fw-bold text-dark mb-3">Yêu cầu theo trạng thái</h5>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1" style="font-size: 0.85rem;">
+                            <span>Chờ tiếp nhận</span>
+                            <span class="fw-bold">2</span>
+                        </div>
+                        <div class="progress" style="height: 8px;"><div class="progress-bar bg-success" style="width: 50%;"></div></div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1" style="font-size: 0.85rem;">
+                            <span>Đang xử lý</span>
+                            <span class="fw-bold">1</span>
+                        </div>
+                        <div class="progress" style="height: 8px;"><div class="progress-bar bg-success" style="width: 25%;"></div></div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1" style="font-size: 0.85rem;">
+                            <span>Đã giải quyết</span>
+                            <span class="fw-bold">1</span>
+                        </div>
+                        <div class="progress" style="height: 8px;"><div class="progress-bar bg-success" style="width: 25%;"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL ĐĂNG XUẤT -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; padding: 10px;">
+                <div class="modal-header border-0 pb-0 align-items-center">
+                    <h5 class="modal-title fw-bold text-dark" style="font-size: 1.15rem;">Đăng xuất</h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-dark py-3" style="font-size: 0.95rem;">
+                    Bạn muốn đăng xuất khỏi CropMate AI?
+                </div>
+                <div class="modal-footer border-0 pt-0 pb-2">
+                    <button type="button" class="btn btn-outline-secondary px-4 py-2 fw-medium" data-bs-dismiss="modal" style="border-radius: 8px; font-size: 0.9rem;">Hủy</button>
+                    <button type="button" class="btn px-4 py-2 fw-medium text-white" style="background-color: #14532d; border-radius: 8px; font-size: 0.9rem;" onclick="confirmLogout()">Đăng xuất</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS & Thư viện -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../js/storage.js"></script>
+    <script src="../../js/ui.js"></script>
+    <script>
+        function openLogoutModal(e) {
+            e.preventDefault();
+            var myModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+            myModal.show();
+        }
+        function confirmLogout() {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = '../../login.html';
+        }
+    </script>
 </body>
 </html>
