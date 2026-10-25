@@ -1,118 +1,273 @@
-(function () {
-  const CM = window.CM, U = CM.ui, S = CM.store, Q = CM.q;
-  const me = CM.auth.guard('coordinator');
-  if (!me) return;
-  U.mountShell(me);
-  const view = U.qs('#view');
-  const now = new Date();
-  const state = { y: now.getFullYear(), m: now.getMonth(), sel: CM.today(), farm: '', type: '' };
-  const TYPES = [{ value: 'care', label: 'Chăm sóc' }, { value: 'inspection', label: 'Kiểm tra đồng ruộng' }, { value: 'meeting', label: 'Họp / tập huấn' }, { value: 'other', label: 'Khác' }];
-  const typeLabel = (v) => (TYPES.find((t) => t.value === v) || { label: 'Khác' }).label;
-  const pad = (x) => String(x).padStart(2, '0');
-  const iso = (y, m, d) => y + '-' + pad(m + 1) + '-' + pad(d);
+let eventsData = [
+    { id: 1, title: "Tỉa lá già và chồi nách", farm: "Vườn rau Mai Hương", date: "2026-10-19", type: "task", status: "late", daysLate: 6, season: "Cà chua đông 2026" },
+    { id: 2, title: "Tổng kết vụ Hè Thu", farm: "HTX Điều phối", date: "2026-10-20", type: "meeting", status: "warning" },
+    { id: 3, title: "Kiểm tra rầy và sâu cuốn lá", farm: "Trang trại Hải Lúa", date: "2026-10-21", type: "task", status: "late", daysLate: 4, season: "Lúa Thu Đông 2026" },
+    { id: 4, title: "Phun phòng bệnh sau mưa", farm: "Vườn rau Mai Hương", date: "2026-10-23", type: "task", status: "late", daysLate: 2, season: "Cà chua đông 2026" },
+    { id: 5, title: "Lịch tưới đợt 2 - Cà chua", farm: "Vườn rau Mai Hương", date: "2026-10-26", type: "task", status: "normal" },
+    { id: 6, title: "Họp điều phối tuần tới", farm: "HTX Điều phối", date: "2026-10-27", type: "meeting", status: "warning" },
+    { id: 7, title: "Kiểm tra đồng ruộng", farm: "Trang trại Hải Lúa", date: "2026-10-29", type: "task", status: "normal" },
+    { id: 8, title: "Bón thúc đợt 2 (đón đòng)", farm: "Trang trại Hải Lúa", date: "2026-10-29", type: "task", status: "info" },
+    { id: 9, title: "Bón thúc kali", farm: "Vườn rau Mai Hương", date: "2026-10-30", type: "task", status: "info" }
+];
 
-  /** Gộp sự kiện điều phối + công việc checklist của nông dân vào một lịch. */
-  function itemsByDate() {
-    const map = {}, today = CM.today();
-    const push = (d, o) => { (map[d] = map[d] || []).push(o); };
-    S.all('calendarEvents').filter((e) => (!state.farm || e.farmId === state.farm) && (!state.type || state.type === e.type)).forEach((e) => push(e.date, { kind: 'event', id: e.id, title: e.title, cls: e.type === 'meeting' ? 'meeting' : '', farmId: e.farmId, ev: e }));
-    if (!state.type || state.type === 'task') {
-      S.all('checklists').forEach((c) => {
-        const s = Q.season(c.seasonId); if (!s || s.status !== 'active') return;
-        if (state.farm && s.farmId !== state.farm) return;
-        c.items.filter((i) => i.status !== 'done').forEach((i) => push(i.dueDate, { kind: 'task', title: i.title, cls: i.dueDate < today ? 'late' : 'task', farmId: s.farmId, season: s, late: i.dueDate < today }));
-      });
+// Trạng thái tháng/năm hiện tại (Khởi đầu ở tháng 10 năm 2026)
+let currentYear = 2026;
+let currentMonth = 10; // 1 đến 12
+let selectedDate = "2026-10-25";
+
+document.addEventListener("DOMContentLoaded", function() {
+    renderCalendar();
+    renderLateTasks();
+    renderDayDetail(selectedDate);
+});
+
+// Hàm chuyển đổi tháng (direction: -1 là lùi tháng, +1 là tiến tháng)
+function changeMonth(direction) {
+    currentMonth += direction;
+    if (currentMonth > 12) {
+        currentMonth = 1;
+        currentYear++;
+    } else if (currentMonth < 1) {
+        currentMonth = 12;
+        currentYear--;
     }
-    return map;
-  }
+    renderCalendar();
+}
 
-  function shell() {
-    view.innerHTML =
-      '<div class="page-head"><div><h2>Lịch hoạt động</h2><p>Lịch chăm sóc, kiểm tra và họp của HTX, kèm các công việc từ checklist của nông dân. Việc trễ hạn hiển thị màu đỏ.</p></div><button class="btn" data-new>' + U.icon('plus') + ' Thêm sự kiện</button></div>' +
-      '<div class="card"><div class="toolbar"><div class="row"><button class="btn btn-outline btn-sm" data-nav="-1" aria-label="Tháng trước">‹</button><strong id="mlabel" style="min-width:130px;text-align:center" aria-live="polite"></strong><button class="btn btn-outline btn-sm" data-nav="1" aria-label="Tháng sau">›</button><button class="btn btn-ghost btn-sm" data-nav="0">Hôm nay</button></div>' +
-      '<div class="field"><label for="flt-farm">Nông hộ</label><select id="flt-farm">' + U.optionList([{ value: '', label: 'Tất cả' }].concat(S.all('farms').map((f) => ({ value: f.id, label: f.name }))), state.farm) + '</select></div>' +
-      '<div class="field"><label for="flt-type">Loại</label><select id="flt-type">' + U.optionList([{ value: '', label: 'Tất cả' }, { value: 'task', label: 'Việc của nông dân' }].concat(TYPES), state.type) + '</select></div></div>' +
-      '<div id="grid" style="padding:8px 12px"></div></div>' +
-      '<div class="split" style="margin-top:20px"><section class="card" aria-labelledby="h-day"><div class="card-head"><h2 id="h-day"></h2></div><div id="day"></div></section><section class="card" aria-labelledby="h-late"><div class="card-head"><h2 id="h-late">Việc trễ hạn</h2></div><div id="late"></div></section></div>';
-    U.qs('#flt-farm', view).addEventListener('change', (e) => { state.farm = e.target.value; draw(); });
-    U.qs('#flt-type', view).addEventListener('change', (e) => { state.type = e.target.value; draw(); });
-    draw();
-    if (U.param('new') === '1') { const f = U.param('farm'); history.replaceState(null, '', location.pathname); eventForm(null, f); }
-  }
+// Nút "Hôm nay" quay về tháng hiện tại (Tháng 10/2026 theo demo)
+function goToToday() {
+    currentYear = 2026;
+    currentMonth = 10;
+    selectedDate = "2026-10-25";
+    renderCalendar();
+    renderDayDetail(selectedDate);
+}
 
-  function draw() {
-    const map = itemsByDate(), first = new Date(state.y, state.m, 1), days = new Date(state.y, state.m + 1, 0).getDate();
-    const offset = (first.getDay() + 6) % 7, today = CM.today();
-    U.qs('#mlabel', view).textContent = 'Tháng ' + (state.m + 1) + ', ' + state.y;
-    let h = '<table class="cal" role="grid" aria-label="Lịch tháng ' + (state.m + 1) + '/' + state.y + '"><thead><tr>' + ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map((d) => '<th scope="col">' + d + '</th>').join('') + '</tr></thead><tbody>';
-    let d = 1 - offset;
-    for (let w = 0; w < 6 && d <= days; w++) {
-      h += '<tr>';
-      for (let c = 0; c < 7; c++, d++) {
-        if (d < 1 || d > days) { h += '<td class="out"></td>'; continue; }
-        const key = iso(state.y, state.m, d), its = map[key] || [];
-        h += '<td class="' + (key === today ? 'today ' : '') + (key === state.sel ? 'sel' : '') + '"><button type="button" class="daybtn" data-day="' + key + '" aria-label="Ngày ' + d + ', ' + its.length + ' mục"><span class="dn">' + d + '</span>' +
-          its.slice(0, 2).map((i) => '<span class="ev ' + i.cls + '">' + U.esc(i.title) + '</span>').join('') + (its.length > 2 ? '<span class="ev more">+' + (its.length - 2) + ' mục</span>' : '') + (its.length ? '<span class="evdot" aria-hidden="true"></span>' : '') + '</button></td>';
-      }
-      h += '</tr>';
+// Render lưới lịch động theo tháng/năm
+function renderCalendar() {
+    const labelEl = document.getElementById("currentMonthLabel");
+    labelEl.innerText = `Tháng ${currentMonth}, ${currentYear}`;
+
+    const grid = document.getElementById("calendarGrid");
+    const headersHTML = `
+        <div class="calendar-header">T2</div>
+        <div class="calendar-header">T3</div>
+        <div class="calendar-header">T4</div>
+        <div class="calendar-header">T5</div>
+        <div class="calendar-header">T6</div>
+        <div class="calendar-header">T7</div>
+        <div class="calendar-header">CN</div>
+    `;
+
+    // Tính số ngày trong tháng hiện tại
+    let totalDays = new Date(currentYear, currentMonth, 0).getDate();
+
+    // Tính ngày trong tuần của ngày mùng 1 (0: Chủ Nhật, 1: Thứ Hai, ...)
+    let firstDayIndex = new Date(currentYear, currentMonth - 1, 1).getDay();
+    // Quy đổi về chuẩn T2 là đầu tuần (T2=0, T3=1, ..., CN=6)
+    let emptySpaces = (firstDayIndex === 0) ? 6 : firstDayIndex - 1;
+
+    let daysHTML = "";
+    // Điền các ô trống đầu tháng
+    for (let i = 0; i < emptySpaces; i++) {
+        daysHTML += `<div class="calendar-day text-muted bg-light"></div>`;
     }
-    U.qs('#grid', view).innerHTML = h + '</tbody></table>';
-    drawDay(map); drawLate();
-  }
 
-  function drawDay(map) {
-    U.qs('#h-day', view).textContent = 'Ngày ' + U.fmtDate(state.sel);
-    const its = (map || itemsByDate())[state.sel] || [], box = U.qs('#day', view);
-    if (!its.length) { box.innerHTML = U.empty('calendar', 'Không có hoạt động', 'Thêm sự kiện cho ngày này.', '<button class="btn btn-sm" data-new>Thêm sự kiện</button>'); return; }
-    box.innerHTML = '<ul class="list">' + its.map((i) => {
-      const farm = i.farmId ? Q.farm(i.farmId) : null;
-      if (i.kind === 'event') return '<li><div><strong>' + U.esc(i.title) + '</strong><p class="small muted">' + typeLabel(i.ev.type) + (farm ? ' · ' + U.esc(farm.name) : ' · Toàn HTX') + '</p>' + (i.ev.note ? '<p class="small">' + U.esc(i.ev.note) + '</p>' : '') + '</div><div class="row"><button class="btn btn-sm btn-ghost" data-edit="' + i.id + '" aria-label="Sửa">' + U.icon('edit') + '</button><button class="btn btn-sm btn-ghost" data-del="' + i.id + '" aria-label="Xóa">' + U.icon('trash') + '</button></div></li>';
-      return '<li><div><strong>' + U.esc(i.title) + '</strong><p class="small muted">Việc của nông dân · ' + U.esc(i.season.name) + (farm ? ' · ' + U.esc(farm.name) : '') + '</p></div>' + (i.late ? U.badge('danger', 'Trễ hạn') : U.badge('info', 'Công việc')) + '</li>';
-    }).join('') + '</ul>';
-  }
+    const filterFarm = document.getElementById("filterFarm").value;
+    const filterType = document.getElementById("filterType").value;
 
-  function drawLate() {
-    const late = [], today = CM.today();
-    S.all('checklists').forEach((c) => { const s = Q.season(c.seasonId); if (!s || s.status !== 'active') return; if (state.farm && s.farmId !== state.farm) return; c.items.filter((i) => i.status !== 'done' && i.dueDate < today).forEach((i) => late.push({ i: i, s: s })); });
-    late.sort((a, b) => (a.i.dueDate < b.i.dueDate ? -1 : 1));
-    U.qs('#late', view).innerHTML = late.length ? '<ul class="list">' + late.map((x) => { const f = Q.farm(x.s.farmId); return '<li><div><strong>' + U.esc(x.i.title) + '</strong><p class="small muted">' + U.esc(f ? f.name : '') + ' · ' + U.esc(x.s.name) + '</p></div><span class="small" style="color:var(--danger);white-space:nowrap">Trễ ' + Math.abs(U.daysFromToday(x.i.dueDate)) + ' ngày</span></li>'; }).join('') + '</ul>' : U.empty('check', 'Không có việc trễ hạn', 'Các nông hộ đang đúng tiến độ.');
-  }
+    // Điền các ngày trong tháng
+    for (let i = 1; i <= totalDays; i++) {
+        let mStr = currentMonth < 10 ? `0${currentMonth}` : `${currentMonth}`;
+        let dStr = i < 10 ? `0${i}` : `${i}`;
+        let fullDate = `${currentYear}-${mStr}-${dStr}`;
+        let isToday = (fullDate === selectedDate);
 
-  function eventForm(ev, farmId) {
-    const m = U.openModal({
-      title: ev ? 'Sửa sự kiện' : 'Thêm sự kiện',
-      body: '<form id="ef" novalidate><div class="form-grid">' +
-        U.field({ name: 'title', label: 'Tiêu đề', required: true, value: ev ? ev.title : '', full: true }) +
-        U.field({ name: 'date', label: 'Ngày', type: 'date', required: true, value: ev ? ev.date : state.sel }) +
-        U.field({ name: 'type', label: 'Loại hoạt động', type: 'select', options: TYPES, value: ev ? ev.type : 'care' }) +
-        U.field({ name: 'farmId', label: 'Nông hộ', type: 'select', options: S.all('farms').map((f) => ({ value: f.id, label: f.name })), blank: 'Toàn HTX', value: ev ? ev.farmId : farmId || '', full: true }) +
-        U.field({ name: 'note', label: 'Ghi chú', type: 'textarea', rows: 3, value: ev ? ev.note : '', full: true }) + '</div></form>',
-      footer: '<button class="btn btn-outline" data-close>Hủy</button><button class="btn" form="ef" type="submit">' + (ev ? 'Lưu thay đổi' : 'Thêm sự kiện') + '</button>',
+        // Lọc sự kiện
+        let dayEvents = eventsData.filter(ev => {
+            if (ev.date !== fullDate) return false;
+            if (filterFarm !== "all" && ev.farm !== filterFarm && ev.farm !== "HTX Điều phối") return false;
+            if (filterType !== "all" && ev.type !== filterType) return false;
+            return true;
+        });
+
+        let eventsTagsHTML = dayEvents.map(ev => {
+            let badgeClass = "event-normal";
+            if (ev.status === "late") badgeClass = "event-late";
+            else if (ev.status === "warning") badgeClass = "event-warning";
+            else if (ev.status === "info") badgeClass = "event-info";
+
+            return `<div class="event-tag ${badgeClass}" title="${ev.title}" onclick="event.stopPropagation();">${ev.title}</div>`;
+        }).join("");
+
+        daysHTML += `
+            <div class="calendar-day ${isToday ? 'active-today' : ''}" onclick="selectDate('${fullDate}')">
+                <span class="day-num ${isToday ? 'text-success fw-bold' : ''}">${i}</span>
+                ${eventsTagsHTML}
+            </div>
+        `;
+    }
+
+    grid.innerHTML = headersHTML + daysHTML;
+}
+
+// Khi click vào một ô ngày trên lịch
+function selectDate(dateStr) {
+    selectedDate = dateStr;
+    renderCalendar();
+    renderDayDetail(dateStr);
+}
+
+// Hiển thị chi tiết sự kiện ngày được chọn
+function renderDayDetail(dateStr) {
+    const titleEl = document.getElementById("selectedDateTitle");
+    const container = document.getElementById("dayDetailContainer");
+
+    let parts = dateStr.split("-");
+    titleEl.innerText = `Ngày ${parts[2]}/${parts[1]}/${parts[0]}`;
+
+    let dayEvents = eventsData.filter(ev => ev.date === dateStr);
+
+    if (dayEvents.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-3">
+                <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-2" style="width: 50px; height: 50px;">
+                    <i class="fa-regular fa-calendar-plus fs-4 text-success"></i>
+                </div>
+                <h6 class="fw-bold text-dark mb-1">Không có hoạt động</h6>
+                <p class="text-muted mb-0" style="font-size: 0.85rem;">Thêm sự kiện cho ngày này.</p>
+            </div>
+        `;
+    } else {
+        let html = `<div class="list-group list-group-flush">`;
+        dayEvents.forEach((ev) => {
+            let globalIndex = eventsData.findIndex(item => item.id === ev.id);
+            html += `
+                <div class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center border-bottom">
+                    <div>
+                        <div class="fw-bold text-dark">${ev.title}</div>
+                        <div class="text-muted" style="font-size: 0.8rem;">${ev.farm} ${ev.season ? '· ' + ev.season : ''}</div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-primary py-0 px-2" onclick="editEvent(${globalIndex})"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-sm btn-outline-danger py-0 px-2" onclick="deleteEvent(${globalIndex})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+        html += `</div>`;
+        container.innerHTML = html;
+    }
+}
+
+// Render danh sách việc trễ hạn
+function renderLateTasks() {
+    const listEl = document.getElementById("lateTasksList");
+    let lateEvents = eventsData.filter(ev => ev.status === "late");
+
+    if (lateEvents.length === 0) {
+        listEl.innerHTML = `<p class="text-muted text-center py-3">Không có công việc trễ hạn.</p>`;
+        return;
+    }
+
+    let html = "";
+    lateEvents.forEach(ev => {
+        html += `
+            <div class="list-group-item px-0 py-3 d-flex justify-content-between align-items-start border-bottom">
+                <div>
+                    <div class="fw-bold text-dark mb-1">${ev.title}</div>
+                    <div class="text-muted" style="font-size: 0.8rem;">${ev.farm} · ${ev.season || 'Canh tác chung'}</div>
+                </div>
+                <span class="text-danger fw-bold text-nowrap ms-2" style="font-size: 0.8rem;">Trễ ${ev.daysLate || 2} ngày</span>
+            </div>
+        `;
     });
-    const f = U.qs('#ef', m.el); U.clearErrorsOnInput(f);
-    f.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (!U.validate(f, { title: { label: 'Tiêu đề', required: true, min: 3, max: 100 }, date: { label: 'Ngày', required: true } })) return;
-      const d = U.formData(f);
-      if (ev) S.update('calendarEvents', ev.id, d); else S.create('calendarEvents', Object.assign({ createdBy: me.id }, d));
-      if (d.farmId) { const farm = Q.farm(d.farmId); if (farm && !ev) S.notify({ userId: farm.ownerId }, 'Lịch hoạt động mới', d.title + ' — ' + U.fmtDate(d.date), 'pages/farmer/farmer-season-dashboard.html'); }
-      const dt = d.date.split('-'); state.y = +dt[0]; state.m = +dt[1] - 1; state.sel = d.date;
-      m.close(); U.toast(ev ? 'Đã cập nhật sự kiện.' : 'Đã thêm sự kiện.'); draw();
-    });
-  }
+    listEl.innerHTML = html;
+}
 
-  view.addEventListener('click', async (e) => {
-    const t = e.target.closest('button'); if (!t) return;
-    if (t.dataset.day) { state.sel = t.dataset.day; draw(); }
-    else if (t.dataset.nav !== undefined) {
-      const n = +t.dataset.nav;
-      if (n === 0) { state.y = now.getFullYear(); state.m = now.getMonth(); state.sel = CM.today(); }
-      else { state.m += n; if (state.m < 0) { state.m = 11; state.y--; } if (state.m > 11) { state.m = 0; state.y++; } }
-      draw();
-    } else if (t.hasAttribute('data-new')) eventForm(null);
-    else if (t.dataset.edit) eventForm(S.find('calendarEvents', t.dataset.edit));
-    else if (t.dataset.del) { if (await U.confirm({ title: 'Xóa sự kiện', message: 'Xóa sự kiện này khỏi lịch?', confirmText: 'Xóa', danger: true })) { S.remove('calendarEvents', t.dataset.del); U.toast('Đã xóa sự kiện.'); draw(); } }
-  });
+// Mở modal thêm sự kiện
+function openAddEventModal() {
+    document.getElementById("modalTitle").innerHTML = `<i class="fa-solid fa-plus me-2"></i> Thêm sự kiện mới`;
+    document.getElementById("eventIndex").value = "";
+    document.getElementById("eventTitleInput").value = "";
+    document.getElementById("eventDateInput").value = selectedDate;
+    document.getElementById("eventFarmInput").value = "HTX Điều phối";
+    document.getElementById("eventTypeInput").value = "task";
 
-  U.withLoading(view, shell);
-})();
+    var modal = new bootstrap.Modal(document.getElementById('eventModal'));
+    modal.show();
+}
+
+function openAddEventForSelectedDate() {
+    openAddEventModal();
+}
+
+// Lưu dữ liệu sự kiện
+function saveEventData() {
+    let index = document.getElementById("eventIndex").value;
+    let title = document.getElementById("eventTitleInput").value.trim();
+    let farm = document.getElementById("eventFarmInput").value;
+    let date = document.getElementById("eventDateInput").value;
+    let type = document.getElementById("eventTypeInput").value;
+
+    if (!title || !date) {
+        alert("Vui lòng nhập đầy đủ tên sự kiện và ngày thực hiện!");
+        return;
+    }
+
+    if (index === "") {
+        let newEvent = {
+            id: Date.now(),
+            title: title,
+            farm: farm,
+            date: date,
+            type: type,
+            status: "normal"
+        };
+        eventsData.push(newEvent);
+    } else {
+        let idx = parseInt(index);
+        eventsData[idx].title = title;
+        eventsData[idx].farm = farm;
+        eventsData[idx].date = date;
+        eventsData[idx].type = type;
+    }
+
+    var modalEl = document.getElementById('eventModal');
+    var modal = bootstrap.Modal.getInstance(modalEl);
+    modal.hide();
+
+    // Nếu ngày sự kiện thêm nằm ở tháng khác, tự động chuyển tháng sang ngày đó để thấy ngay
+    let parts = date.split("-");
+    currentYear = parseInt(parts[0]);
+    currentMonth = parseInt(parts[1]);
+    selectedDate = date;
+
+    renderCalendar();
+    renderLateTasks();
+    renderDayDetail(selectedDate);
+}
+
+// Chỉnh sửa sự kiện
+function editEvent(index) {
+    let ev = eventsData[index];
+    document.getElementById("modalTitle").innerHTML = `<i class="fa-solid fa-pen me-2"></i> Chỉnh sửa sự kiện`;
+    document.getElementById("eventIndex").value = index;
+    document.getElementById("eventTitleInput").value = ev.title;
+    document.getElementById("eventDateInput").value = ev.date;
+    document.getElementById("eventFarmInput").value = ev.farm;
+    document.getElementById("eventTypeInput").value = ev.type;
+
+    var modal = new bootstrap.Modal(document.getElementById('eventModal'));
+    modal.show();
+}
+
+// Xóa sự kiện
+function deleteEvent(index) {
+    if (confirm("Bạn có chắc chắn muốn xóa sự kiện này không?")) {
+        eventsData.splice(index, 1);
+        renderCalendar();
+        renderLateTasks();
+        renderDayDetail(selectedDate);
+    }
+}
