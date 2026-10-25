@@ -1,0 +1,11 @@
+/* CSS riêng cho trang Nhật ký canh tác */
+.field-log-note {
+  min-width: 200px;
+  max-width: 360px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.field-log-filters {
+  align-items: end;
+}

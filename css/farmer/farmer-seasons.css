@@ -1,0 +1,12 @@
+/* CSS riêng cho trang Mùa vụ & thửa ruộng */
+.season-table-wrap {
+  margin-top: 14px;
+}
+
+.season-search-input {
+  min-width: 220px;
+}
+
+.season-table-wrap .actions {
+  flex-wrap: wrap;
+}

@@ -1,0 +1,23 @@
+/* CSS riêng cho trang Checklist mùa vụ */
+.checklist-layout {
+  align-items: start;
+}
+
+.checklist-intro {
+  margin-bottom: 14px;
+}
+
+.checklist-progress-labels {
+  margin-bottom: 4px;
+}
+
+.checklist-tip {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background: var(--field-50);
+}
+
+.checklist-tip p {
+  margin: 5px 0 0;
+}

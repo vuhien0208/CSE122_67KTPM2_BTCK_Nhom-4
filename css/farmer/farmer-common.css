@@ -1,0 +1,20 @@
+/*
+ * CSS dùng chung cho các trang Farmer.
+ * Giữ lại CSS nền tảng hiện có để giao diện cũ không bị thay đổi.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap");
+@import url("../style.css");
+@import url("../components.css");
+@import url("../responsive.css");
+
+/* Dùng cho các vùng được ẩn/hiện bằng JavaScript. */
+[hidden] {
+  display: none !important;
+}
+
+.user-chip .meta .user-name {
+  display: block;
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 700;
+}

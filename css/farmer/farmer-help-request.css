@@ -1,0 +1,8 @@
+/* CSS riêng cho trang Yêu cầu hỗ trợ */
+.request-title-cell {
+  min-width: 220px;
+}
+
+.request-filter-row {
+  align-items: end;
+}

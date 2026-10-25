@@ -1,0 +1,18 @@
+/* CSS riêng cho trang Tổng quan mùa vụ */
+.dashboard-section-title {
+  margin: 24px 0 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.dashboard-follow-up {
+  margin-top: 20px;
+}
+
+.dashboard-recent {
+  margin-top: 20px;
+}
+
+.dashboard-recent .table-wrap {
+  margin-bottom: 0;
+}
