@@ -25,13 +25,13 @@ Admin có nút **Đặt lại dữ liệu demo** ở dashboard.
 5. Coordinator: thấy yêu cầu, việc trễ hạn, tiến độ trong Tổng quan nông hộ, Lịch và Tổng kết.
 6. Admin: vô hiệu hóa tài khoản → tài khoản đó không đăng nhập được.
 
-## Ba tính năng AI (MÔ PHỎNG)
-Viết bằng JavaScript rule-based trong `js/ai.js`, **không gọi LLM/API thật**; giao diện ghi rõ "AI mô phỏng".
-- **AI-1** Field Issue Classifier — `farmer-help-request.html`
-- **AI-2** Season Checklist Generator — `farmer-checklist.html`
-- **AI-3** Farm Log Summarizer — `expert-request-detail.html`
+## Tính năng AI
+- **AI-1** Field Issue Classifier trên `farmer-help-request.html` dùng AI mô phỏng khi để trống API key hoặc Gemini khi nhập key. Kết quả có nhóm vấn đề, dấu hiệu, giải thích và hướng xử lý tham khảo; nông dân chọn áp dụng rồi có thể chỉnh sửa trước khi gửi yêu cầu.
+- **AI-3** Farm Log Summarizer là tính năng mô phỏng rule-based trong `js/ai.js`.
+- **AI tạo checklist mùa vụ** trên `farmer-season-dashboard.html` đề xuất công việc theo cây trồng, giai đoạn và thông tin mùa vụ. Để trống API key để thử giao diện bằng AI mô phỏng; nhập key để gọi Gemini API thật. Key chỉ giữ trong bộ nhớ trang và được gửi trực tiếp đến Google, không lưu trong LocalStorage.
+- Checklist được lưu qua `CM.store` và xuất hiện trong trang `farmer-checklist.html`, nơi nông dân có thể đánh dấu hoàn thành, chỉnh sửa hoặc xóa công việc.
 
-Cả ba dùng chung luồng: nhập → validation → đang xử lý → kết quả + giải thích → chấp nhận / chỉnh sửa / từ chối / tạo lại → lưu. Có trạng thái *không đủ dữ liệu*, *chưa chắc chắn*, *lỗi* (bật ô "Mô phỏng lỗi hệ thống" để demo). Ảnh chỉ được ghi nhận là có đính kèm, không được phân tích.
+Gemini được gọi trực tiếp từ trình duyệt để phù hợp với bản demo frontend; không dùng cách này trong môi trường production vì API key phía trình duyệt có thể bị lộ. Production nên gọi Gemini qua backend/proxy có quản lý bí mật. Nội dung do AI tạo chỉ là gợi ý, cần được kiểm tra theo điều kiện thực tế.
 
 ## Cấu trúc
 ```

@@ -5,6 +5,43 @@
   font-weight: 700;
 }
 
+.ai-checklist-card {
+  margin-top: 20px;
+}
+
+.ai-checklist-body {
+  display: grid;
+  gap: 14px;
+}
+
+.ai-checklist-body .field {
+  max-width: 560px;
+}
+
+.ai-checklist-actions {
+  align-items: center;
+}
+
+.ai-checklist-disclaimer {
+  margin: 0;
+}
+
+.ai-checklist-preview {
+  display: grid;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.ai-checklist-preview-list {
+  display: grid;
+  gap: 8px;
+  padding-left: 22px;
+}
+
+.ai-checklist-preview-list li {
+  padding-left: 2px;
+}
+
 .dashboard-follow-up {
   margin-top: 20px;
 }

@@ -132,6 +132,34 @@
                         <h2 class="dashboard-section-title">Mùa vụ đang chạy</h2>
                         <div id="active-seasons"></div>
 
+                        <section class="card ai-checklist-card" aria-labelledby="h-ai-checklist">
+                            <div class="card-head">
+                                <div>
+                                    <h2 id="h-ai-checklist">AI tạo checklist mùa vụ</h2>
+                                    <p class="small muted">Gemini đề xuất công việc theo cây trồng, giai đoạn và thông tin mùa vụ.</p>
+                                </div>
+                                <span class="badge">Gemini / demo</span>
+                            </div>
+                            <div class="card-body ai-checklist-body">
+                                <div class="field">
+                                    <label for="ai-checklist-season">Mùa vụ</label>
+                                    <select id="ai-checklist-season"></select>
+                                </div>
+                                <div class="field">
+                                    <label for="gemini-api-key">Gemini API key <span class="muted">(không bắt buộc)</span></label>
+                                    <input id="gemini-api-key" type="password" autocomplete="off" spellcheck="false" placeholder="Nhập API key của bạn">
+                                    <span class="small muted">Để trống để thử giao diện bằng dữ liệu AI mô phỏng. Nếu nhập key, key chỉ giữ trong trang này và gửi trực tiếp đến Gemini.</span>
+                                </div>
+                                <div class="row ai-checklist-actions">
+                                    <button type="button" class="btn" data-generate-ai-checklist>Tạo checklist</button>
+                                    <a class="small" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Lấy API key</a>
+                                </div>
+                                <p id="ai-checklist-status" class="small muted" role="status" aria-live="polite"></p>
+                                <div id="ai-checklist-result" hidden></div>
+                                <p class="small muted ai-checklist-disclaimer">Checklist là gợi ý tham khảo. Hãy điều chỉnh theo tình hình thực tế và hướng dẫn của chuyên gia địa phương.</p>
+                            </div>
+                        </section>
+
                         <div class="grid grid-2 dashboard-follow-up">
                             <section class="card" aria-labelledby="h-tasks">
                                 <div class="card-head">
@@ -169,6 +197,7 @@
     <script src="../../js/storage.js"></script>
     <script src="../../js/auth.js"></script>
     <script src="../../js/ui.js"></script>
+    <script src="../../js/ai.js"></script>
     <script src="../../js/modules/farmer-season-dashboard.js"></script>
 </body>
 </html>
